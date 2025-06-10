@@ -1,0 +1,28 @@
+{
+  "name": "@novaui/unocss-preset",
+  "version": "0.0.2-beta.3",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "typings": "./dist/index.d.ts",
+  "files": ["./dist"],
+  "scripts": {
+    "build": "pnpm unbuild"
+  },
+  "peerDependencies": {
+    "unocss": "66.0.0"
+  },
+  "dependencies": {
+    "@unocss/core": "66.0.0",
+    "colord": "^2.9.3",
+    "unocss": "66.0.0"
+  }
+}

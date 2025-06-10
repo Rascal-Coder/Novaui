@@ -1,0 +1,19 @@
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "never"
+  },
+  "eslint.useFlatConfig": true,
+  "editor.guides.bracketPairs": "active",
+  "editor.formatOnSave": false,
+  "eslint.validate": ["html", "css", "scss", "json", "jsonc"],
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.patterns": {
+    "package.json": "package-lock.json, pnpm*, .editorconfig,.gitattributes,.gitignore,.npmrc,tsconfig.json",
+    "vite.config.ts": "*.config.ts,*.config.js",
+    "README.md": "README*,LICENSE,CHANGELOG*,vercel.json"
+  },
+  "prettier.enable": false,
+  "unocss.root": ["./"],
+  "typescript.tsdk": "node_modules/typescript/lib"
+}
