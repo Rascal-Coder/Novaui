@@ -1,17 +1,20 @@
 import process from 'node:process';
 
+import boxen from 'boxen';
 import { cac } from 'cac';
 import chalk from 'chalk';
 import { consola } from 'consola';
 
 import { run } from './run';
 
-// console.log(`
-//    ${chalk.cyan('╔════════════════════════════════╗')}
-//    ${chalk.cyan('║')}  ${chalk.magenta.bold('XPRESS CLI')}                    ${chalk.cyan('║')}
-//    ${chalk.cyan('║')}  ${chalk.gray('Modern Monorepo Toolchain')}     ${chalk.cyan('║')}
-//    ${chalk.cyan('╚════════════════════════════════╝')}
-// `);
+console.log(
+  boxen(`${chalk.magenta.bold('NovaUI CLI')}\n${chalk.gray('Modern Monorepo Toolchain')}`, {
+    padding: 1,
+    margin: 1,
+    borderStyle: 'round',
+    borderColor: 'cyan'
+  })
+);
 
 try {
   const turboRun = cac('turbo-run');

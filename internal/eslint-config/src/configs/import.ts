@@ -4,29 +4,19 @@ import type { FlatConfigItem } from '../types';
 export async function createImportConfig(overrides: Record<string, string> = {}) {
   const pluginImport = await interopDefault(import('eslint-plugin-import-x'));
 
-  const externalVue = [
+  const externalUi = [
     'vite',
     'vite/**',
     'vitepress',
     'vitepress/**',
     '@vitejs/**',
     'vite-plugin-**',
-    'vue',
-    '@vue/**',
-    'vue-router',
-    '@vueuse/**',
     'unocss',
     '@unocss/**',
     'unplugin-**',
     'pinia',
-    'naive-ui',
-    'element-plus',
-    'ant-design-vue',
-    'soy-ui',
-    '@soy-ui/**',
-    'soybean-ui',
-    '@soybean-ui/**',
-    '@soybeanjs/**'
+    'novaui',
+    '@novaui/**'
   ];
   const externalReact = ['react', 'react-dom', 'react-router-dom', 'react-query', 'react-i18next', 'antd'];
   const externalCommon = ['axios', 'es-toolkit', 'date-fns', 'dayjs', 'lodash-es', '@tanstack/**', 'zod', 'valibot'];
@@ -79,7 +69,7 @@ export async function createImportConfig(overrides: Record<string, string> = {})
     '@/**'
   ];
 
-  const externalGroups = [...externalVue, ...externalReact, ...externalCommon].map(item => ({
+  const externalGroups = [...externalUi, ...externalReact, ...externalCommon].map(item => ({
     group: 'external' as const,
     pattern: item,
     position: 'before' as const

@@ -9,8 +9,8 @@
     "pnpm": ">=9.12.0"
   },
   "scripts": {
-    "build": "turbo-run build",
-    "build:unocss-preset": "pnpm -r --filter=\"./packages/unocss-preset\" run build",
+    "build": "turbo build",
+    "build:unocss-preset": "pnpm run build --filter=@novaui/unocss-preset",
     "check:type": "turbo run typecheck",
     "clean": "node scripts/clean.mjs",
     "commit": "nova git-commit",
@@ -29,6 +29,7 @@
     "@novaui/eslint-config": "workspace:*",
     "@novaui/tsconfig": "workspace:*",
     "@novaui/turbo-run": "workspace:*",
+    "@novaui/ui-variants": "workspace:*",
     "@novaui/unocss-preset": "workspace:*",
     "@types/node": "22.13.5",
     "boxen": "8.0.1",
@@ -53,6 +54,6 @@
     "pre-commit": "pnpm check:type && pnpm lint-staged"
   },
   "lint-staged": {
-    "*": "eslint --fix"
+    "!packages/primitives/**": "eslint --fix"
   }
 }
