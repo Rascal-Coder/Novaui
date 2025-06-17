@@ -2,8 +2,8 @@ import { defineConfig } from 'vitepress';
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  title: 'soy-ui-react',
-  description: 'The documentation of soybean-ui',
+  title: 'nova-ui',
+  description: 'The documentation of nova-ui',
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [

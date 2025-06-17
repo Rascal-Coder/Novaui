@@ -27,7 +27,7 @@ export default defineConfig(() => {
       target: 'esnext',
       sourcemap: false,
       lib: {
-        name: 'soybean-variants',
+        name: 'nova-ui-variants',
         formats: ['es'],
         fileName: (_format, entryName) => `${entryName}.mjs`,
         entry: {

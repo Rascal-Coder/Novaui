@@ -1,5 +1,5 @@
 {
-  "name": "@novaui/ui-variants",
+  "name": "@novaui/variants",
   "version": "0.0.1",
   "sideEffects": false,
   "exports": {
@@ -22,7 +22,7 @@
     "tailwind-variants": "1.0.0"
   },
   "devDependencies": {
-    "vite": "6.2.6",
+    "vite": "6.3.5",
     "vite-plugin-dts": "4.5.3"
   }
 }

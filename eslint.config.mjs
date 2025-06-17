@@ -11,6 +11,9 @@ export default defineConfig(
   },
   {
     rules: {
+      'consistent-return': 'off',
+      'no-plusplus': 'off',
+      '@typescript-eslint/no-empty-object-type': 'off',
       'import/newline-after-import': 'error',
       'import/no-absolute-path': 'warn',
       'import/no-empty-named-blocks': ['error'],

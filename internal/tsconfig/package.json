@@ -6,6 +6,6 @@
   "license": "MIT",
   "files": ["base.json", "library.json", "node.json", "web-app.json", "web.json"],
   "dependencies": {
-    "vite": "6.1.1"
+    "vite": "6.3.5"
   }
 }

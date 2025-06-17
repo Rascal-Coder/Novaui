@@ -354,7 +354,7 @@ export const buttonVariants = tv({
   }
 });
 
-type ButtonVariants = VariantProps<typeof buttonVariants>;
+export type ButtonVariants = VariantProps<typeof buttonVariants>;
 
 export type ButtonVariant = NonNullable<ButtonVariants['variant']>;
 
