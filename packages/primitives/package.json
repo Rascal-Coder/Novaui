@@ -11,7 +11,7 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs"
     },
-    "./*": {
+    "./components/*": {
       "types": "./dist/components/*/index.d.ts",
       "import": "./dist/components/*/index.mjs"
     }
@@ -22,8 +22,7 @@
   "typings": "./dist/index.d.ts",
   "files": ["./dist"],
   "scripts": {
-    "build": "vite build",
-    "dev": "vite build --watch"
+    "build": "vite build"
   },
   "peerDependencies": {
     "react": ">=18.0.0",

@@ -1,3 +1,5 @@
-const App = () => <div className="h-full">novaui</div>;
+import { NButton } from 'nova-ui';
+
+const App = () => <NButton />;
 
 export default App;

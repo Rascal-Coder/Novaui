@@ -4,7 +4,9 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "#/*": ["./src/*"]
+      "#/*": ["./src/*"],
+      "@novaui/variants": ["../ui-variants/src"],
+      "@novaui/variants/*": ["../ui-variants/src/*"]
     }
   },
   "references": [{ "path": "./tsconfig.node.json" }],

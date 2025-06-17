@@ -6,6 +6,12 @@
   "author": "Rascal-Coder",
   "license": "MIT",
   "keywords": ["ui", "react", "vite"],
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./dist/index.mjs"
+    }
+  },
   "scripts": {
     "build": "vite build"
   },

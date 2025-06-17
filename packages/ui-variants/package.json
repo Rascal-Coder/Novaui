@@ -6,6 +6,10 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs"
+    },
+    "./variants/*": {
+      "types": "./dist/variants/*.d.ts",
+      "import": "./dist/variants/*.mjs"
     }
   },
   "main": "./dist/index.mjs",
