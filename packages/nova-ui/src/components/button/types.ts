@@ -9,8 +9,9 @@ type ButtonProps = React.ComponentProps<'button'> &
 
 type ButtonIconPorps = Omit<ButtonProps, 'leading' | 'trailing'>;
 
-type ButtonGroupProps = ButtonGroupVariants & {
-  orientation?: ThemeOrientation;
-  children?: React.ReactNode;
-};
+type ButtonGroupProps = React.ComponentProps<'div'> &
+  ButtonGroupVariants & {
+    orientation?: ThemeOrientation;
+    asChild?: boolean;
+  };
 export type { ButtonProps, ButtonIconPorps, ButtonGroupProps };

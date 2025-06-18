@@ -1,8 +1,8 @@
 import process from 'node:process';
 import { URL, fileURLToPath } from 'node:url';
 
-import react from '@vitejs/plugin-react';
-import Unocss from 'unocss/vite';
+import React from '@vitejs/plugin-react';
+import UnoCSS from 'unocss/vite';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
@@ -15,7 +15,7 @@ export default defineConfig({
   define: {
     'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
   },
-  plugins: [react(), Unocss()],
+  plugins: [UnoCSS(), React()],
   server: {
     host: '0.0.0.0',
     port: 1997,

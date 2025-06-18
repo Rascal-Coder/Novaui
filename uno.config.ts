@@ -4,6 +4,11 @@ import type { Theme } from 'unocss/preset-mini';
 import { presetAnimations } from 'unocss-preset-animations';
 
 export default defineConfig<Theme>({
+  content: {
+    pipeline: {
+      include: [/\.(vue|svelte|[jt]sx|mdx?|astro|elm|php|phtml|html)($|\?)/, /.*\/nova-ui\/.*\.[m]js$/]
+    }
+  },
   transformers: [transformerDirectives(), transformerVariantGroup()],
   presets: [presetWind3({ dark: 'class' }), presetTypography(), presetAnimations(), presetNovaui()]
 });

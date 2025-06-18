@@ -2,7 +2,7 @@ import { Slot } from '@novaui/primitives';
 import { buttonVariants, cn } from '@novaui/variants';
 import * as React from 'react';
 
-import type { ButtonProps } from '../types';
+import type { ButtonProps } from './types';
 
 export default function NButton({
   className,

@@ -42,7 +42,7 @@ export default defineConfig(() => {
       target: 'esnext',
       sourcemap: true,
       lib: {
-        name: 'nova-ui-primitives',
+        name: 'novaui-primitives',
         formats: ['es'],
         fileName: (_format, entryName) => `${entryName}.mjs`,
         entry: {

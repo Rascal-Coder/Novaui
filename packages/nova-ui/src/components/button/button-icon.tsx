@@ -1,6 +1,5 @@
-import type { ButtonIconPorps } from '../types';
-
 import NButton from './button';
+import type { ButtonIconPorps } from './types';
 
 export default function ButtonIcon({
   children,
