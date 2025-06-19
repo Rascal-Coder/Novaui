@@ -1,39 +1,16 @@
-import { Primitive } from '@novaui/primitives';
-import { type ReactNode, useMemo } from 'react';
+import { Slot, Slottable } from '@novaui/primitives';
+import { useMemo } from 'react';
 
-export type AnchorTarget = '_blank' | '_parent' | '_self' | '_top' | (string & {}) | undefined;
-export type AnchorRel = 'noopener' | 'noreferrer' | 'nofollow' | 'sponsored' | 'ugc' | (string & {}) | undefined;
-export type HTMLAttributeReferrerPolicy =
-  | ''
-  | 'no-referrer'
-  | 'no-referrer-when-downgrade'
-  | 'origin'
-  | 'origin-when-cross-origin'
-  | 'same-origin'
-  | 'strict-origin'
-  | 'strict-origin-when-cross-origin'
-  | 'unsafe-url';
-
-export type MaybeArray<T> = T | T[];
-export interface AnchorLinkProps {
-  href?: string;
-  target?: AnchorTarget;
-  rel?: AnchorRel;
-  referrerPolicy?: HTMLAttributeReferrerPolicy;
-  disabled?: boolean;
-  onClick?: MaybeArray<(e: React.MouseEvent<HTMLAnchorElement>) => void | Promise<void>>;
-  navigate?: (e: React.MouseEvent<HTMLAnchorElement>) => void;
-  isExternal?: boolean;
-  children?: ReactNode;
-}
+import type { AnchorLinkProps } from './types';
 
 export default function Link({
+  asChild = false,
   target = '_blank',
   rel = 'noopener noreferrer',
-
+  isExternal = false,
   children,
   ...props
-}: AnchorLinkProps) {
+}: AnchorLinkProps & { asChild?: boolean }) {
   const { href, referrerPolicy, disabled } = props;
   const computedProps = useMemo(() => {
     return {
@@ -60,17 +37,20 @@ export default function Link({
       }
     }
 
-    if (props.href && props.navigate && !props.isExternal) {
+    if (props.href && props.navigate && !isExternal) {
       props.navigate(e);
     }
   };
 
+  const Comp = asChild ? Slot : 'a';
+
   return (
-    <Primitive.a
+    <Comp
       {...computedProps}
+      {...props}
       onClick={onClick}
     >
-      {children}
-    </Primitive.a>
+      <Slottable> {children}</Slottable>
+    </Comp>
   );
 }

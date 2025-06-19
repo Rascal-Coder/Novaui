@@ -1,4 +1,13 @@
-import type { ButtonGroupVariants, ButtonVariants, ThemeOrientation } from '@novaui/variants';
+import type {
+  ButtonGroupVariants,
+  ButtonShadow,
+  ButtonShape,
+  ButtonVariant,
+  ButtonVariants,
+  ThemeOrientation
+} from '@novaui/variants';
+
+import type { AnchorLinkProps } from '../link';
 
 type ButtonProps = React.ComponentProps<'button'> &
   ButtonVariants & {
@@ -14,4 +23,22 @@ type ButtonGroupProps = React.ComponentProps<'div'> &
     orientation?: ThemeOrientation;
     asChild?: boolean;
   };
-export type { ButtonProps, ButtonIconPorps, ButtonGroupProps };
+
+type ButtonLinkProps = ButtonProps &
+  AnchorLinkProps & {
+    variant?: string;
+  };
+
+interface LoadingButtonProps extends ButtonProps {
+  loading?: boolean;
+}
+export type {
+  ButtonProps,
+  ButtonIconPorps,
+  ButtonGroupProps,
+  ButtonLinkProps,
+  LoadingButtonProps,
+  ButtonShape,
+  ButtonShadow,
+  ButtonVariant
+};

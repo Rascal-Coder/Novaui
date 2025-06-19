@@ -1,1 +1,1 @@
-export type { ThemeOrientation } from '@novaui/variants';
+export type { ThemeColor, ThemeOrientation, ThemeSize, ThemeAlign, ThemeSide } from '@novaui/variants';

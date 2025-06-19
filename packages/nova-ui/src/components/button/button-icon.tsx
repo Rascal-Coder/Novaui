@@ -5,13 +5,15 @@ export default function ButtonIcon({
   children,
   color = 'accent',
   variant = 'ghost',
-  shape = 'square'
+  shape = 'square',
+  ...props
 }: ButtonIconPorps) {
   return (
     <NButton
       color={color}
       shape={shape}
       variant={variant}
+      {...props}
     >
       {children}
     </NButton>

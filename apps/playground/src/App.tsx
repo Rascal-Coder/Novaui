@@ -1,53 +1,301 @@
-import { NButton } from 'nova-ui';
+import { Loader, Minus, Pause, Plus, SkipBack, SkipForward } from 'lucide-react';
+import { NButton, NButtonGroup, NButtonIcon, NButtonLink, NLoadingButton } from 'nova-ui';
+import type { ButtonShadow, ButtonVariant, ThemeColor, ThemeSize } from 'nova-ui';
 
-const App = () => (
-  <div className="p-8 space-y-4">
-    <h1 className="mb-4 text-2xl font-bold">NovaUI 按钮测试</h1>
+const colors: ThemeColor[] = ['primary', 'destructive', 'success', 'warning', 'info', 'carbon', 'secondary', 'accent'];
+const variants: ButtonVariant[] = ['solid', 'pure', 'plain', 'outline', 'dashed', 'soft', 'ghost', 'link'];
+const sizes: ThemeSize[] = ['xs', 'sm', 'md', 'lg', 'xl', '2xl'];
+const shadows: ButtonShadow[] = ['none', 'sm', 'md', 'lg'];
 
-    <div className="space-y-2">
-      <h2 className="text-lg font-semibold">基础按钮</h2>
-      <div className="flex flex-wrap gap-2">
-        <NButton>默认按钮</NButton>
-        <NButton color="primary">Primary</NButton>
-        <NButton color="destructive">Destructive</NButton>
-        <NButton color="success">Success</NButton>
-        <NButton color="warning">Warning</NButton>
-        <NButton color="info">Info</NButton>
+export default function App() {
+  return (
+    <div className="flex-c gap-4 p-6">
+      {/* Color */}
+      <div>
+        <div className="mb-2 font-bold">Color</div>
+        <div className="flex flex-wrap gap-12px">
+          {colors.map(color => (
+            <NButton
+              color={color}
+              key={color}
+            >
+              {color}
+            </NButton>
+          ))}
+        </div>
+      </div>
+      {/* Variant */}
+      <div>
+        <div className="mb-2 font-bold">Variant</div>
+        <div className="flex-c-stretch gap-12px">
+          {colors.map(color => (
+            <div
+              className="flex flex-wrap gap-12px"
+              key={color}
+            >
+              {variants.map(variant => (
+                <NButton
+                  color={color}
+                  key={variant}
+                  variant={variant}
+                >
+                  {variant}
+                </NButton>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+      {/* Size */}
+      <div>
+        <div className="mb-2 font-bold">Size</div>
+        <div className="flex flex-wrap gap-12px">
+          {sizes.map((size, index) => (
+            <NButton
+              color={colors[index]}
+              key={size}
+              size={size}
+              variant="outline"
+            >
+              {size}
+            </NButton>
+          ))}
+        </div>
+      </div>
+      {/* Shape */}
+      <div>
+        <div className="mb-2 font-bold">Shape</div>
+        <div className="flex flex-wrap gap-12px">
+          <NButton
+            color="primary"
+            shape="rounded"
+            variant="solid"
+          >
+            rounded
+          </NButton>
+          <div className="flex-c-center">
+            <NButtonIcon
+              color="destructive"
+              shape="square"
+              variant="plain"
+            >
+              <Minus />
+            </NButtonIcon>
+            <div className="text-12px text-#666">square</div>
+          </div>
+          <div className="flex-c-center">
+            <NButtonIcon
+              color="success"
+              shape="circle"
+              variant="outline"
+            >
+              <Plus />
+            </NButtonIcon>
+            <div className="text-12px text-#666">circle</div>
+          </div>
+          <div className="flex-c-center">
+            <NButtonIcon
+              color="warning"
+              shape="square"
+              variant="dashed"
+            >
+              <Plus />
+            </NButtonIcon>
+            <div className="text-12px text-#666">square</div>
+          </div>
+          <div className="flex-c-center">
+            <NButtonIcon shape="circle">
+              <Minus />
+            </NButtonIcon>
+            <div className="text-12px text-#666">circle</div>
+          </div>
+        </div>
+      </div>
+      {/* Shadow */}
+      <div>
+        <div className="mb-2 font-bold">Shadow</div>
+        <div className="flex flex-wrap gap-12px">
+          {shadows.map((item, index) => (
+            <NButton
+              color={colors[index]}
+              key={item}
+              shadow={item}
+              variant="plain"
+            >
+              {item}
+            </NButton>
+          ))}
+        </div>
+      </div>
+      {/* Slot */}
+      <div>
+        <div className="mb-2 font-bold">Slot</div>
+        <div className="flex flex-wrap gap-12px">
+          <NButton
+            color="primary"
+            leading={<Plus />}
+          >
+            leading
+          </NButton>
+          <NButton
+            color="destructive"
+            trailing={<Minus />}
+            variant="outline"
+          >
+            After
+          </NButton>
+          <NButton
+            color="success"
+            leading={<Plus />}
+            trailing={<Minus />}
+            variant="dashed"
+          >
+            Both
+          </NButton>
+        </div>
+      </div>
+      {/* Disabled */}
+      <div>
+        <div className="mb-2 font-bold">Disabled</div>
+        <div className="flex flex-wrap gap-12px">
+          <NButton
+            disabled
+            color="destructive"
+            variant="solid"
+          >
+            disabled
+          </NButton>
+          <NButton
+            disabled
+            color="success"
+            variant="outline"
+          >
+            disabled
+          </NButton>
+          <NButton
+            disabled
+            color="warning"
+            variant="dashed"
+          >
+            disabled
+          </NButton>
+        </div>
+      </div>
+      {/* Loading */}
+      <div>
+        <div className="mb-2 font-bold">Loading</div>
+        <div className="flex flex-wrap gap-12px">
+          <NLoadingButton
+            loading
+            color="success"
+            variant="solid"
+          >
+            Loading...
+          </NLoadingButton>
+          <NLoadingButton
+            loading
+            color="warning"
+            leading={<Loader className="animate-spin" />}
+            variant="outline"
+          >
+            Loading...
+          </NLoadingButton>
+        </div>
+      </div>
+      {/* Link */}
+      <div>
+        <div className="mb-2 font-bold">Link</div>
+        <div className="flex flex-wrap gap-12px">
+          <NButtonLink href="https://github.com/Rascal-Coder/Novaui">Novaui</NButtonLink>
+        </div>
+      </div>
+      {/* Button Group */}
+      <div>
+        <div className="mb-2 font-bold">Button Group</div>
+        <div className="flex flex-wrap gap-12px">
+          <NButtonGroup>
+            <NButton variant="outline">
+              <SkipBack />
+            </NButton>
+            <NButton variant="outline">
+              <Pause />
+            </NButton>
+            <NButton variant="outline">
+              <SkipForward />
+            </NButton>
+          </NButtonGroup>
+          <NButtonGroup>
+            <NButton
+              color="destructive"
+              variant="outline"
+            >
+              <SkipBack />
+            </NButton>
+            <NButton
+              color="destructive"
+              variant="outline"
+            >
+              <SkipForward />
+            </NButton>
+          </NButtonGroup>
+        </div>
+      </div>
+      {/* Button Group vertical */}
+      <div>
+        <div className="mb-2 font-bold">Button Group vertical</div>
+        <div className="w-100px">
+          <NButtonGroup orientation="vertical">
+            <NButton variant="dashed">
+              <SkipBack />
+            </NButton>
+            <NButton variant="dashed">
+              <Pause />
+            </NButton>
+            <NButton variant="dashed">
+              <SkipForward />
+            </NButton>
+          </NButtonGroup>
+        </div>
+      </div>
+      {/* Button Icon */}
+      <div>
+        <div className="mb-2 font-bold">Button Icon</div>
+        <div className="flex flex-wrap gap-12px">
+          <NButtonIcon>
+            <SkipBack />
+          </NButtonIcon>
+          <NButtonIcon>
+            <SkipForward />
+          </NButtonIcon>
+          <NButtonIcon>
+            <Pause />
+          </NButtonIcon>
+        </div>
+      </div>
+      {/* Button Icon: fitContent */}
+      <div>
+        <div className="mb-2 font-bold">Button Icon: fitContent</div>
+        <div className="flex flex-wrap gap-12px">
+          <NButtonIcon
+            fitContent
+            className="p-0.5 text-xl"
+          >
+            <SkipBack />
+          </NButtonIcon>
+          <NButtonIcon
+            fitContent
+            className="p-0.5 text-xl"
+          >
+            <SkipForward />
+          </NButtonIcon>
+          <NButtonIcon
+            fitContent
+            className="p-0.5 text-xl"
+          >
+            <Pause />
+          </NButtonIcon>
+        </div>
       </div>
     </div>
-
-    <div className="space-y-2">
-      <h2 className="text-lg font-semibold">不同变体</h2>
-      <div className="flex flex-wrap gap-2">
-        <NButton variant="solid">Solid</NButton>
-        <NButton variant="outline">Outline</NButton>
-        <NButton variant="ghost">Ghost</NButton>
-        <NButton variant="soft">Soft</NButton>
-        <NButton variant="link">Link</NButton>
-      </div>
-    </div>
-
-    <div className="space-y-2">
-      <h2 className="text-lg font-semibold">不同尺寸</h2>
-      <div className="flex flex-wrap items-center gap-2">
-        <NButton size="xs">XS</NButton>
-        <NButton size="sm">SM</NButton>
-        <NButton size="md">MD</NButton>
-        <NButton size="lg">LG</NButton>
-        <NButton size="xl">XL</NButton>
-      </div>
-    </div>
-
-    <div className="space-y-2">
-      <h2 className="text-lg font-semibold">测试背景色</h2>
-      <div className="flex flex-wrap gap-2">
-        <div className="rounded bg-primary p-2 text-primary-foreground">Primary Background</div>
-        <div className="rounded bg-destructive p-2 text-destructive-foreground">Destructive Background</div>
-        <div className="rounded bg-success p-2 text-success-foreground">Success Background</div>
-        <div className="rounded bg-rose-500 p-2 text-white">Rose Background</div>
-      </div>
-    </div>
-  </div>
-);
-
-export default App;
+  );
+}

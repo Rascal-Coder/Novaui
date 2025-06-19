@@ -1,4 +1,4 @@
-import { Slot } from '@novaui/primitives';
+import { Slot, Slottable } from '@novaui/primitives';
 import { buttonVariants, cn } from '@novaui/variants';
 import * as React from 'react';
 
@@ -30,9 +30,9 @@ export default function NButton({
       className={buttonClassName}
       {...props}
     >
-      {!asChild && leading}
-      {children}
-      {!asChild && trailing}
+      {leading}
+      <Slottable>{children}</Slottable>
+      {trailing}
     </Comp>
   );
 }

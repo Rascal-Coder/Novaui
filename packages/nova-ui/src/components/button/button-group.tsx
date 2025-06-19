@@ -1,4 +1,4 @@
-import { Slot } from '@novaui/primitives';
+import { Slot, Slottable } from '@novaui/primitives';
 import { buttonGroupVariants, cn } from '@novaui/variants';
 import * as React from 'react';
 
@@ -15,7 +15,7 @@ export default function ButtonGroup({ asChild = false, orientation, children, cl
       className={mergeClassNames}
       {...props}
     >
-      {children}
+      <Slottable>{children}</Slottable>
     </Comp>
   );
 }
