@@ -1,6 +1,6 @@
 import { Slot, Slottable } from '@novaui/primitives';
 import { buttonVariants, cn } from '@novaui/variants';
-import * as React from 'react';
+import { useMemo } from 'react';
 
 import type { ButtonProps } from './types';
 
@@ -20,7 +20,7 @@ export default function NButton({
 }: ButtonProps) {
   const Comp = asChild ? Slot : 'button';
 
-  const buttonClassName = React.useMemo(
+  const buttonClassName = useMemo(
     () => cn(buttonVariants({ color, variant, size, shape, shadow, fitContent }), className),
     [color, variant, size, shape, shadow, fitContent, className]
   );

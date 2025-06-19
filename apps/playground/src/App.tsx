@@ -1,5 +1,5 @@
 import { Loader, Minus, Pause, Plus, SkipBack, SkipForward } from 'lucide-react';
-import { NButton, NButtonGroup, NButtonIcon, NButtonLink, NLoadingButton } from 'nova-ui';
+import { Card, NButton, NButtonGroup, NButtonIcon, NButtonLink, NLoadingButton } from 'nova-ui';
 import type { ButtonShadow, ButtonVariant, ThemeColor, ThemeSize } from 'nova-ui';
 
 const colors: ThemeColor[] = ['primary', 'destructive', 'success', 'warning', 'info', 'carbon', 'secondary', 'accent'];
@@ -206,7 +206,12 @@ export default function App() {
       <div>
         <div className="mb-2 font-bold">Link</div>
         <div className="flex flex-wrap gap-12px">
-          <NButtonLink href="https://github.com/Rascal-Coder/Novaui">Novaui</NButtonLink>
+          <NButtonLink
+            asChild
+            href="https://github.com/Rascal-Coder/Novaui"
+          >
+            Novaui
+          </NButtonLink>
         </div>
       </div>
       {/* Button Group */}
@@ -294,6 +299,54 @@ export default function App() {
           >
             <Pause />
           </NButtonIcon>
+        </div>
+      </div>
+
+      {/* Card Examples */}
+      <div>
+        <div className="mb-2 font-bold">Card Examples</div>
+        <div className="flex flex-wrap gap-4">
+          {/* Simple Card */}
+          <Card className="w-80">
+            <Card.Content>Simple card content</Card.Content>
+          </Card>
+
+          {/* Full Card */}
+          <Card
+            className="w-80"
+            size="md"
+          >
+            <Card.Header>
+              <Card.TitleRoot>
+                <Card.Title>Card Title</Card.Title>
+              </Card.TitleRoot>
+            </Card.Header>
+            <Card.Content>This is a full card with header, content, and footer sections.</Card.Content>
+            <Card.Footer>
+              <NButton
+                size="sm"
+                variant="outline"
+              >
+                Action
+              </NButton>
+            </Card.Footer>
+          </Card>
+
+          {/* Custom Card with Slot */}
+          <Card className="w-80">
+            <Card.Header asChild>
+              <header className="flex items-center justify-between border-b p-4">
+                <h3 className="font-semibold">Custom Header</h3>
+                <NButtonIcon
+                  size="sm"
+                  variant="ghost"
+                >
+                  <Plus />
+                </NButtonIcon>
+              </header>
+            </Card.Header>
+            <Card.Content className="p-4">Custom content using slot functionality for complete control.</Card.Content>
+          </Card>
         </div>
       </div>
     </div>

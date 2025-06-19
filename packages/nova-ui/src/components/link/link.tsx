@@ -1,5 +1,6 @@
 import { Slot, Slottable } from '@novaui/primitives';
 import { useMemo } from 'react';
+import type { MouseEvent } from 'react';
 
 import type { AnchorLinkProps } from './types';
 
@@ -24,7 +25,7 @@ export default function Link({
     };
   }, [disabled, href, referrerPolicy, rel, target]);
 
-  const onClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  const onClick = (e: MouseEvent<HTMLAnchorElement>) => {
     if (disabled) {
       e.stopPropagation();
       e.preventDefault();

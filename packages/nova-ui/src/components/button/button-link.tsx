@@ -3,25 +3,7 @@ import { NLink } from '../link';
 import NButton from './button';
 import type { ButtonLinkProps } from './types';
 
-export default function ButtonLink({
-  variant = 'link',
-  // asChild = false,
-  children,
-  ...delegatedProps
-}: ButtonLinkProps) {
-  // if (asChild) {
-  //   console.log('xxxxxxxxxxxxx', children);
-
-  //   return (
-  //     <NButton
-  //       asChild
-  //       variant={variant}
-  //       {...delegatedProps}
-  //     >
-  //       {/* {children} */}
-  //     </NButton>
-  //   );
-  // }
+export default function ButtonLink({ variant = 'link', children, ...delegatedProps }: ButtonLinkProps) {
   return (
     <NButton
       variant={variant}
