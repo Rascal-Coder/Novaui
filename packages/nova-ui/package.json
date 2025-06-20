@@ -5,15 +5,18 @@
   "author": "Rascal-Coder",
   "license": "MIT",
   "keywords": ["ui", "react", "vite"],
+  "publishConfig": {
+    "exports": {
+      ".": {
+        "default": "./dist/index.mjs"
+      }
+    }
+  },
   "sideEffects": false,
   "exports": {
     ".": {
       "types": "./src/index.ts",
-      "default": "./dist/index.mjs"
-    },
-    "./*": {
-      "types": "./dist/components/*/index.d.ts",
-      "import": "./dist/components/*/index.mjs"
+      "development": "./src/index.ts"
     }
   },
   "module": "./dist/index.mjs",

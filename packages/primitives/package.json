@@ -5,15 +5,18 @@
   "author": "Novaui",
   "license": "ISC",
   "keywords": ["primitives", "react", "ui", "radix-ui"],
+  "publishConfig": {
+    "exports": {
+      ".": {
+        "default": "./dist/index.mjs"
+      }
+    }
+  },
   "sideEffects": false,
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs"
-    },
-    "./components/*": {
-      "types": "./dist/components/*/index.d.ts",
-      "import": "./dist/components/*/index.mjs"
+      "types": "./src/index.ts",
+      "development": "./src/index.ts"
     }
   },
   "main": "./dist/index.mjs",
