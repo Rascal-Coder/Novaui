@@ -1,354 +1,108 @@
-import { Loader, Minus, Pause, Plus, SkipBack, SkipForward } from 'lucide-react';
-import { Card, NButton, NButtonGroup, NButtonIcon, NButtonLink, NLoadingButton } from 'nova-ui';
-import type { ButtonShadow, ButtonVariant, ThemeColor, ThemeSize } from 'nova-ui';
+import { Suspense, lazy } from 'react';
+import { Link, Navigate, Outlet, RouterProvider, createBrowserRouter } from 'react-router';
 
-const colors: ThemeColor[] = ['primary', 'destructive', 'success', 'warning', 'info', 'carbon', 'secondary', 'accent'];
-const variants: ButtonVariant[] = ['solid', 'pure', 'plain', 'outline', 'dashed', 'soft', 'ghost', 'link'];
-const sizes: ThemeSize[] = ['xs', 'sm', 'md', 'lg', 'xl', '2xl'];
-const shadows: ButtonShadow[] = ['none', 'sm', 'md', 'lg'];
+// 动态导入所有示例组件
+const exampleModules = import.meta.glob('./examples/*/index.tsx');
 
-export default function App() {
+// 创建懒加载组件映射
+const lazyComponents = Object.entries(exampleModules).reduce(
+  (acc, [path, moduleLoader]) => {
+    // 从路径中提取组件名称 './examples/button/index.tsx' -> 'button'
+    const componentName = path.split('/')[2];
+    if (componentName) {
+      acc[componentName] = lazy(moduleLoader as () => Promise<{ default: React.ComponentType }>);
+    }
+    return acc;
+  },
+  {} as Record<string, React.LazyExoticComponent<React.ComponentType>>
+);
+
+// 获取所有示例名称并排序
+const exampleNames = Object.keys(lazyComponents).sort();
+
+// 首字母大写函数
+const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
+
+// 布局组件
+function Layout() {
   return (
-    <div className="flex-c gap-4 p-6">
-      {/* Color */}
-      <div>
-        <div className="mb-2 font-bold">Color</div>
-        <div className="flex flex-wrap gap-12px">
-          {colors.map(color => (
-            <NButton
-              color={color}
-              key={color}
+    <div>
+      <nav className="border-b bg-gray-100 p-4">
+        <div className="flex items-center gap-4">
+          <Link
+            className="text-lg text-blue-600 font-bold hover:text-blue-800"
+            to="/"
+          >
+            NovaUI
+          </Link>
+          {exampleNames.map(name => (
+            <Link
+              className="text-gray-600 hover:text-gray-800"
+              key={name}
+              to={`/${name}`}
             >
-              {color}
-            </NButton>
+              {capitalize(name)}
+            </Link>
           ))}
         </div>
-      </div>
-      {/* Variant */}
-      <div>
-        <div className="mb-2 font-bold">Variant</div>
-        <div className="flex-c-stretch gap-12px">
-          {colors.map(color => (
-            <div
-              className="flex flex-wrap gap-12px"
-              key={color}
-            >
-              {variants.map(variant => (
-                <NButton
-                  color={color}
-                  key={variant}
-                  variant={variant}
-                >
-                  {variant}
-                </NButton>
-              ))}
-            </div>
-          ))}
-        </div>
-      </div>
-      {/* Size */}
-      <div>
-        <div className="mb-2 font-bold">Size</div>
-        <div className="flex flex-wrap gap-12px">
-          {sizes.map((size, index) => (
-            <NButton
-              color={colors[index]}
-              key={size}
-              size={size}
-              variant="outline"
-            >
-              {size}
-            </NButton>
-          ))}
-        </div>
-      </div>
-      {/* Shape */}
-      <div>
-        <div className="mb-2 font-bold">Shape</div>
-        <div className="flex flex-wrap gap-12px">
-          <NButton
-            color="primary"
-            shape="rounded"
-            variant="solid"
-          >
-            rounded
-          </NButton>
-          <div className="flex-c-center">
-            <NButtonIcon
-              color="destructive"
-              shape="square"
-              variant="plain"
-            >
-              <Minus />
-            </NButtonIcon>
-            <div className="text-12px text-#666">square</div>
-          </div>
-          <div className="flex-c-center">
-            <NButtonIcon
-              color="success"
-              shape="circle"
-              variant="outline"
-            >
-              <Plus />
-            </NButtonIcon>
-            <div className="text-12px text-#666">circle</div>
-          </div>
-          <div className="flex-c-center">
-            <NButtonIcon
-              color="warning"
-              shape="square"
-              variant="dashed"
-            >
-              <Plus />
-            </NButtonIcon>
-            <div className="text-12px text-#666">square</div>
-          </div>
-          <div className="flex-c-center">
-            <NButtonIcon shape="circle">
-              <Minus />
-            </NButtonIcon>
-            <div className="text-12px text-#666">circle</div>
-          </div>
-        </div>
-      </div>
-      {/* Shadow */}
-      <div>
-        <div className="mb-2 font-bold">Shadow</div>
-        <div className="flex flex-wrap gap-12px">
-          {shadows.map((item, index) => (
-            <NButton
-              color={colors[index]}
-              key={item}
-              shadow={item}
-              variant="plain"
-            >
-              {item}
-            </NButton>
-          ))}
-        </div>
-      </div>
-      {/* Slot */}
-      <div>
-        <div className="mb-2 font-bold">Slot</div>
-        <div className="flex flex-wrap gap-12px">
-          <NButton
-            color="primary"
-            leading={<Plus />}
-          >
-            leading
-          </NButton>
-          <NButton
-            color="destructive"
-            trailing={<Minus />}
-            variant="outline"
-          >
-            After
-          </NButton>
-          <NButton
-            color="success"
-            leading={<Plus />}
-            trailing={<Minus />}
-            variant="dashed"
-          >
-            Both
-          </NButton>
-        </div>
-      </div>
-      {/* Disabled */}
-      <div>
-        <div className="mb-2 font-bold">Disabled</div>
-        <div className="flex flex-wrap gap-12px">
-          <NButton
-            disabled
-            color="destructive"
-            variant="solid"
-          >
-            disabled
-          </NButton>
-          <NButton
-            disabled
-            color="success"
-            variant="outline"
-          >
-            disabled
-          </NButton>
-          <NButton
-            disabled
-            color="warning"
-            variant="dashed"
-          >
-            disabled
-          </NButton>
-        </div>
-      </div>
-      {/* Loading */}
-      <div>
-        <div className="mb-2 font-bold">Loading</div>
-        <div className="flex flex-wrap gap-12px">
-          <NLoadingButton
-            loading
-            color="success"
-            variant="solid"
-          >
-            Loading...
-          </NLoadingButton>
-          <NLoadingButton
-            loading
-            color="warning"
-            leading={<Loader className="animate-spin" />}
-            variant="outline"
-          >
-            Loading...
-          </NLoadingButton>
-        </div>
-      </div>
-      {/* Link */}
-      <div>
-        <div className="mb-2 font-bold">Link</div>
-        <div className="flex flex-wrap gap-12px">
-          <NButtonLink
-            asChild
-            href="https://github.com/Rascal-Coder/Novaui"
-          >
-            Novaui
-          </NButtonLink>
-        </div>
-      </div>
-      {/* Button Group */}
-      <div>
-        <div className="mb-2 font-bold">Button Group</div>
-        <div className="flex flex-wrap gap-12px">
-          <NButtonGroup>
-            <NButton variant="outline">
-              <SkipBack />
-            </NButton>
-            <NButton variant="outline">
-              <Pause />
-            </NButton>
-            <NButton variant="outline">
-              <SkipForward />
-            </NButton>
-          </NButtonGroup>
-          <NButtonGroup>
-            <NButton
-              color="destructive"
-              variant="outline"
-            >
-              <SkipBack />
-            </NButton>
-            <NButton
-              color="destructive"
-              variant="outline"
-            >
-              <SkipForward />
-            </NButton>
-          </NButtonGroup>
-        </div>
-      </div>
-      {/* Button Group vertical */}
-      <div>
-        <div className="mb-2 font-bold">Button Group vertical</div>
-        <div className="w-100px">
-          <NButtonGroup orientation="vertical">
-            <NButton variant="dashed">
-              <SkipBack />
-            </NButton>
-            <NButton variant="dashed">
-              <Pause />
-            </NButton>
-            <NButton variant="dashed">
-              <SkipForward />
-            </NButton>
-          </NButtonGroup>
-        </div>
-      </div>
-      {/* Button Icon */}
-      <div>
-        <div className="mb-2 font-bold">Button Icon</div>
-        <div className="flex flex-wrap gap-12px">
-          <NButtonIcon>
-            <SkipBack />
-          </NButtonIcon>
-          <NButtonIcon>
-            <SkipForward />
-          </NButtonIcon>
-          <NButtonIcon>
-            <Pause />
-          </NButtonIcon>
-        </div>
-      </div>
-      {/* Button Icon: fitContent */}
-      <div>
-        <div className="mb-2 font-bold">Button Icon: fitContent</div>
-        <div className="flex flex-wrap gap-12px">
-          <NButtonIcon
-            fitContent
-            className="p-0.5 text-xl"
-          >
-            <SkipBack />
-          </NButtonIcon>
-          <NButtonIcon
-            fitContent
-            className="p-0.5 text-xl"
-          >
-            <SkipForward />
-          </NButtonIcon>
-          <NButtonIcon
-            fitContent
-            className="p-0.5 text-xl"
-          >
-            <Pause />
-          </NButtonIcon>
-        </div>
-      </div>
-
-      {/* Card Examples */}
-      <div>
-        <div className="mb-2 font-bold">Card Examples</div>
-        <div className="flex flex-wrap gap-4">
-          {/* Simple Card */}
-          <Card className="w-80">
-            <Card.Content>Simple card content</Card.Content>
-          </Card>
-
-          {/* Full Card */}
-          <Card
-            className="w-80"
-            size="md"
-          >
-            <Card.Header>
-              <Card.TitleRoot>
-                <Card.Title>Card Title</Card.Title>
-              </Card.TitleRoot>
-            </Card.Header>
-            <Card.Content>This is a full card with header, content, and footer sections.</Card.Content>
-            <Card.Footer>
-              <NButton
-                size="sm"
-                variant="outline"
-              >
-                Action
-              </NButton>
-            </Card.Footer>
-          </Card>
-
-          {/* Custom Card with Slot */}
-          <Card className="w-80">
-            <Card.Header asChild>
-              <header className="flex items-center justify-between border-b p-4">
-                <h3 className="font-semibold">Custom Header</h3>
-                <NButtonIcon
-                  size="sm"
-                  variant="ghost"
-                >
-                  <Plus />
-                </NButtonIcon>
-              </header>
-            </Card.Header>
-            <Card.Content className="p-4">Custom content using slot functionality for complete control.</Card.Content>
-          </Card>
-        </div>
-      </div>
+      </nav>
+      <main>
+        <Outlet />
+      </main>
     </div>
   );
+}
+
+// 加载中组件
+function Loading() {
+  return (
+    <div className="h-32 flex items-center justify-center">
+      <div className="text-gray-500">Loading...</div>
+    </div>
+  );
+}
+
+// 动态生成路由配置
+const dynamicRoutes = exampleNames
+  .map(name => {
+    const Component = lazyComponents[name];
+    if (!Component) {
+      return null;
+    }
+    return {
+      path: name,
+      element: (
+        <div className="p-6">
+          <h2 className="mb-4 text-xl font-bold">{capitalize(name)} Component Examples</h2>
+          <Suspense fallback={<Loading />}>
+            <Component />
+          </Suspense>
+        </div>
+      )
+    };
+  })
+  .filter((route): route is NonNullable<typeof route> => route !== null);
+
+// 创建路由配置
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <Layout />,
+    children: [
+      {
+        index: true,
+        element: (
+          <Navigate
+            replace
+            to={`/${exampleNames[0] || 'button'}`}
+          />
+        )
+      },
+      ...dynamicRoutes
+    ]
+  }
+]);
+
+export default function App() {
+  return <RouterProvider router={router} />;
 }

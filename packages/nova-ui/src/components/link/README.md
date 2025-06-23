@@ -47,15 +47,3 @@ function handleNavigate(e) {
 ```tsx
 <Link href="https://example.com" target="_self" rel="nofollow">自定义属性</Link>
 ```
-
-## 常见问题
-
-- **如何实现 SPA 路由跳转？**
-  传递 `navigate` 函数，并确保 `isExternal={false}`（默认）。
-- **如何防止链接被点击？**
-  设置 `disabled` 属性即可，组件会阻止默认行为。
-- **如何支持多个 onClick？**
-  `onClick` 支持传递数组，所有回调会依次执行。
-
----
-如有更多问题，欢迎提 Issue 或查阅源码。

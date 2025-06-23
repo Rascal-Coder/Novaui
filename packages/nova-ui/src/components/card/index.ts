@@ -1,9 +1,9 @@
-export { default as Card } from './card';
-export { default as CardRoot } from './card-root';
-export { default as CardHeader } from './card-header';
-export { default as CardTitle } from './card-title';
-export { default as CardTitleRoot } from './card-title-root';
-export { default as CardContent } from './card-content';
-export { default as CardFooter } from './card-footer';
+export { default as NCard, useCardUi } from './card';
+export { default as NCardRoot } from './card-root';
+export { default as NCardHeader } from './card-header';
+export { default as NCardTitle } from './card-title';
+export { default as NCardTitleRoot } from './card-title-root';
+export { default as NCardContent } from './card-content';
+export { default as NCardFooter } from './card-footer';
 
 export type * from './types';
