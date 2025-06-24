@@ -382,9 +382,7 @@ export default function ToastExample() {
       swipeDirection="right"
       toastLimit={10}
     >
-      <div className="min-h-screen bg-gray-50 p-6">
-        <ToastExamples />
-      </div>
+      <ToastExamples />
     </Toast.Provider>
   );
 }
