@@ -1,36 +1,35 @@
-import { CircleAlert, CircleCheck, CircleX, Info } from 'lucide-react';
-import React, { isValidElement } from 'react';
+import { CircleAlert, CircleCheck, CircleX, Info, type LucideProps } from 'lucide-react';
+import { type ReactNode, isValidElement } from 'react';
 
 import { useToast } from './context';
+import ToastAction from './toast-action';
 import ToastClose from './toast-close';
 import ToastDescription from './toast-description';
+import ToastProvider from './toast-provider';
 import ToastRoot from './toast-root';
 import ToastTitle from './toast-title';
 import ToastViewport from './toast-viewport';
-import type { ToastIconType, ToastProps } from './types';
+import type { ToastIconType, ToastProps, ToastState } from './types';
 
-const iconRecord: Record<
-  ToastIconType,
-  {
-    icon: React.ComponentType<any>;
-    className: string;
-  }
-> = {
+// 导出组件
+export { ToastProvider, ToastViewport, ToastRoot, ToastTitle, ToastDescription, ToastAction, ToastClose };
+
+const iconRecord: Record<ToastIconType, { icon: React.ComponentType<LucideProps>; class: string }> = {
   destructive: {
     icon: CircleX,
-    className: 'text-destructive'
+    class: 'text-destructive'
   },
   success: {
     icon: CircleCheck,
-    className: 'text-success'
+    class: 'text-success'
   },
   warning: {
     icon: CircleAlert,
-    className: 'text-warning'
+    class: 'text-warning'
   },
   info: {
     icon: Info,
-    className: 'text-info'
+    class: 'text-info'
   }
 };
 
@@ -39,40 +38,54 @@ export default function Toast({ className, size, ui }: ToastProps) {
 
   return (
     <>
-      {toasts.map(toast => (
-        <ToastRoot
-          className={className || (ui?.root as string)}
-          key={toast.id}
-          {...toast}
-          onOpenChange={toast.onOpenChange}
-        >
-          <div className="grid gap-1">
-            {toast.title && (
-              <ToastTitle
-                className={ui?.title as string}
+      {toasts.map((toast: ToastState) => {
+        const IconComponent = toast.iconType && toast.iconType in iconRecord ? iconRecord[toast.iconType].icon : null;
+        const iconClass = toast.iconType && toast.iconType in iconRecord ? iconRecord[toast.iconType].class : '';
+
+        // 提取不会与DOM属性冲突的props
+        const { action, title, description, ...toastRootProps } = toast;
+
+        return (
+          <ToastRoot
+            className={(className as string) || (ui?.root as string)}
+            key={toast.id}
+            {...toastRootProps}
+            onOpenChange={toast.onOpenChange}
+          >
+            <div className="grid gap-1">
+              {title && (
+                <ToastTitle
+                  className={ui?.title as string}
+                  size={size}
+                  titleLeading={IconComponent && <IconComponent className={iconClass} />}
+                >
+                  {title}
+                </ToastTitle>
+              )}
+              {description && (
+                <ToastDescription className={ui?.description as string}>
+                  {isValidElement(description) ? description : (description as ReactNode)}
+                </ToastDescription>
+              )}
+              <ToastClose
+                className={ui?.close as string}
                 size={size}
-              >
-                {toast.iconType &&
-                  React.createElement(iconRecord[toast.iconType].icon, {
-                    className: iconRecord[toast.iconType].className
-                  })}
-                {toast.title}
-              </ToastTitle>
-            )}
-            {toast.description && (
-              <ToastDescription className={ui?.description as string}>
-                {isValidElement(toast.description) ? toast.description : toast.description}
-              </ToastDescription>
-            )}
-            <ToastClose
-              className={ui?.close as string}
-              size={size}
-            />
-          </div>
-          {toast.action && <div className={ui?.action as string}>{toast.action}</div>}
-        </ToastRoot>
-      ))}
+              />
+            </div>
+            {action && <div className={ui?.action as string}>{action}</div>}
+          </ToastRoot>
+        );
+      })}
       <ToastViewport />
     </>
   );
 }
+
+// 组合组件，方便使用
+Toast.Provider = ToastProvider;
+Toast.Viewport = ToastViewport;
+Toast.Root = ToastRoot;
+Toast.Title = ToastTitle;
+Toast.Description = ToastDescription;
+Toast.Action = ToastAction;
+Toast.Close = ToastClose;

@@ -7,40 +7,73 @@ import type { ButtonProps } from '../button';
 export type ToastUi = Partial<Record<ToastSlots, ClassValue>>;
 
 export interface ToastProviderProps {
+  children?: ReactNode;
+  /** UI customization for toast components */
   ui?: ToastUi;
   /**
-   * The maximum number of toasts that can be displayed at the same time.
+   * Maximum number of toasts to display at once
    *
    * @defaultValue 1
    */
   toastLimit?: number;
   /**
-   * The delay time before removing the toast.
+   * Time in milliseconds to wait before removing a toast from DOM after it's dismissed
    *
-   * @defaultValue 1000 * 1000 (ms)
+   * @defaultValue 1000000
    */
   toastRemoveDelay?: number;
-  children?: ReactNode;
+  /**
+   * An author-localized label for each toast. Used to help screen reader users associate the interruption with a toast.
+   *
+   * @defaultValue 'Notification'
+   */
+  label?: string;
+  /**
+   * Time in milliseconds that each toast should remain visible for.
+   *
+   * @defaultValue 5000
+   */
+  duration?: number;
+  /**
+   * Direction of pointer swipe that should close the toast.
+   *
+   * @defaultValue 'right'
+   */
+  swipeDirection?: 'up' | 'down' | 'left' | 'right';
+  /**
+   * Distance in pixels that the swipe must pass before a close is triggered.
+   *
+   * @defaultValue 50
+   */
+  swipeThreshold?: number;
 }
 
 export type ToastIconType = Extract<ThemeColor, 'destructive' | 'success' | 'warning' | 'info'>;
 
-export interface ToastViewportProps extends ComponentPropsWithoutRef<'div'> {
+export interface ToastViewportProps extends ComponentPropsWithoutRef<'ol'> {
   size?: ThemeSize;
-  hotkey?: string;
+  hotkey?: string[];
   label?: string;
 }
 
-export interface ToastRootProps extends ComponentPropsWithoutRef<'div'> {
+export interface ToastRootProps extends Omit<ComponentPropsWithoutRef<'li'>, 'onPause' | 'onResume'> {
   size?: ThemeSize;
   iconType?: ToastIconType;
   richColor?: ThemeColor;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
+  /** Time in milliseconds that toast should remain visible for. Overrides value given to `ToastProvider`. */
+  duration?: number;
+  /** Control the sensitivity of the toast for accessibility purposes. */
+  type?: 'foreground' | 'background';
+  onPause?: () => void;
+  onResume?: () => void;
 }
 
 export interface ToastTitleProps extends ComponentPropsWithoutRef<'div'> {
   size?: ThemeSize;
+  titleLeading?: ReactNode;
+  titleTrailing?: ReactNode;
 }
 
 export interface ToastDescriptionProps extends ComponentPropsWithoutRef<'div'> {}

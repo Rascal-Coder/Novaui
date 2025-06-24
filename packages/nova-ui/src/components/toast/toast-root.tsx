@@ -1,8 +1,7 @@
-import { Primitive } from '@novaui/primitives';
+import { Toast as PrimitiveToast } from '@novaui/primitives';
 import { cn, toastVariants } from '@novaui/variants';
 import { useMemo } from 'react';
 
-import { ToastCloseContext } from './toast-close';
 import type { ToastRootProps } from './types';
 
 export default function ToastRoot({
@@ -13,6 +12,8 @@ export default function ToastRoot({
   children,
   open,
   onOpenChange,
+  duration,
+  type = 'foreground',
   ...props
 }: ToastRootProps) {
   const mergedClassName = useMemo(() => {
@@ -20,21 +21,16 @@ export default function ToastRoot({
     return cn(root(), className);
   }, [size, richColor, className]);
 
-  const handleClose = () => {
-    if (onOpenChange) {
-      onOpenChange(false);
-    }
-  };
-
   return (
-    <ToastCloseContext.Provider value={handleClose}>
-      <Primitive.div
-        className={mergedClassName}
-        data-state={open ? 'open' : 'closed'}
-        {...props}
-      >
-        {children}
-      </Primitive.div>
-    </ToastCloseContext.Provider>
+    <PrimitiveToast
+      className={mergedClassName}
+      duration={duration}
+      open={open}
+      type={type}
+      onOpenChange={onOpenChange}
+      {...props}
+    >
+      {children}
+    </PrimitiveToast>
   );
 }

@@ -1,6 +1,11 @@
 export * from './components/compose-refs';
+export * from './components/dismissable-layer';
+export * from './components/portal';
 export * from './components/primitive';
 export * from './components/slot';
+export * from './components/toast';
+export * from './components/visually-hidden';
 
+export * from './context';
 export * from './shared';
 export * from './types';

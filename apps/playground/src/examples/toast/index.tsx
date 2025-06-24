@@ -1,154 +1,110 @@
-import { NButton, NCard, type ThemeSize, type ToastIconType, ToastProvider, useToast } from 'nova-ui';
+import { NButton, NCard, type ThemeColor, type ThemeSize, Toast, type ToastIconType, useToast } from 'nova-ui';
 
-const iconTypes: ToastIconType[] = ['destructive', 'success', 'warning', 'info'];
+const iconTypes: ToastIconType[] = ['success', 'warning', 'destructive', 'info'];
+const richColors: ThemeColor[] = ['primary', 'destructive', 'success', 'warning', 'info'];
 const sizes: ThemeSize[] = ['xs', 'sm', 'md', 'lg', 'xl', '2xl'];
+const durations = [2000, 3000, 5000, 10000];
 
-function ToastDemo() {
-  const { toast, dismiss } = useToast();
-
-  const showBasicToast = () => {
-    toast({
-      title: '基础 Toast',
-      description: '这是一个简单的 toast 消息示例。'
-    });
-  };
-
-  const showToastWithIcon = (iconType: ToastIconType) => {
-    toast({
-      title: `${iconType.charAt(0).toUpperCase() + iconType.slice(1)} 消息`,
-      description: `这是一个 ${iconType} 类型的 toast 消息。`,
-      iconType
-    });
-  };
-
-  const showToastWithAction = () => {
-    toast({
-      title: '有操作的 Toast',
-      description: '这个 toast 包含一个操作按钮。',
-      iconType: 'info',
-      action: (
-        <NButton
-          size="sm"
-          variant="outline"
-          onClick={() => console.log('操作被执行!')}
-        >
-          执行操作
-        </NButton>
-      )
-    });
-  };
-
-  const showToastWithSize = (size: ThemeSize) => {
-    toast({
-      title: `Size: ${size}`,
-      description: `这是一个 ${size} 尺寸的 toast 消息。`,
-      iconType: 'success',
-      size
-    });
-  };
-
-  const showPersistentToast = () => {
-    toast({
-      title: '持久 Toast',
-      description: '这个 toast 不会自动消失，需要手动关闭。',
-      iconType: 'warning'
-    });
-  };
-
-  const showRichContentToast = () => {
-    toast({
-      title: '富内容 Toast',
-      description: (
-        <div className="space-y-2">
-          <p>这个 toast 包含富文本内容：</p>
-          <ul className="list-disc list-inside space-y-1">
-            <li>支持 HTML 内容</li>
-            <li>可以包含列表</li>
-            <li>支持多种格式</li>
-          </ul>
-        </div>
-      ),
-      iconType: 'info'
-    });
-  };
-
-  const dismissAllToasts = () => {
-    dismiss();
-  };
+function ToastExamples() {
+  const { toast, dismiss, toasts } = useToast();
 
   return (
     <div className="flex-c gap-4">
-      {/* 基础用法 */}
+      {/* Icon Type */}
       <NCard split>
         <NCard.Header>
           <NCard.TitleRoot>
-            <NCard.Title>基础用法</NCard.Title>
+            <NCard.Title>Icon Type</NCard.Title>
           </NCard.TitleRoot>
         </NCard.Header>
         <NCard.Content>
-          <div className="flex flex-wrap gap-3">
-            <NButton onClick={showBasicToast}>显示基础 Toast</NButton>
-            <NButton
-              variant="outline"
-              onClick={showPersistentToast}
-            >
-              持久 Toast
-            </NButton>
-            <NButton
-              variant="ghost"
-              onClick={showRichContentToast}
-            >
-              富内容 Toast
-            </NButton>
-            <NButton
-              color="destructive"
-              variant="outline"
-              onClick={dismissAllToasts}
-            >
-              关闭所有
-            </NButton>
-          </div>
-        </NCard.Content>
-      </NCard>
-
-      {/* 图标类型 */}
-      <NCard split>
-        <NCard.Header>
-          <NCard.TitleRoot>
-            <NCard.Title>图标类型</NCard.Title>
-          </NCard.TitleRoot>
-        </NCard.Header>
-        <NCard.Content>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-12px">
             {iconTypes.map(iconType => (
               <NButton
-                color={iconType}
+                color={iconType === 'destructive' ? 'destructive' : iconType}
                 key={iconType}
-                variant="outline"
-                onClick={() => showToastWithIcon(iconType)}
+                onClick={() =>
+                  toast({
+                    title: iconType.charAt(0).toUpperCase() + iconType.slice(1),
+                    description: `This is a ${iconType} toast notification`,
+                    iconType
+                  })
+                }
               >
-                {iconType.charAt(0).toUpperCase() + iconType.slice(1)}
+                {iconType}
               </NButton>
             ))}
           </div>
         </NCard.Content>
       </NCard>
 
-      {/* 尺寸 */}
+      {/* Rich Color */}
       <NCard split>
         <NCard.Header>
           <NCard.TitleRoot>
-            <NCard.Title>尺寸</NCard.Title>
+            <NCard.Title>Rich Color</NCard.Title>
           </NCard.TitleRoot>
         </NCard.Header>
         <NCard.Content>
-          <div className="flex flex-wrap gap-3">
-            {sizes.map(size => (
+          <div className="flex flex-wrap gap-12px">
+            {richColors.map(color => (
               <NButton
+                color={color}
+                key={color}
+                variant="outline"
+                onClick={() =>
+                  toast({
+                    title: `${color} Toast`,
+                    description: `Rich color: ${color}`,
+                    iconType: 'info',
+                    richColor: color
+                  })
+                }
+              >
+                {color}
+              </NButton>
+            ))}
+            {/* Default color as separate button */}
+            <NButton
+              color="primary"
+              variant="outline"
+              onClick={() =>
+                toast({
+                  title: 'Default Toast',
+                  description: 'Rich color: default',
+                  iconType: 'info'
+                })
+              }
+            >
+              default
+            </NButton>
+          </div>
+        </NCard.Content>
+      </NCard>
+
+      {/* Size */}
+      <NCard split>
+        <NCard.Header>
+          <NCard.TitleRoot>
+            <NCard.Title>Size</NCard.Title>
+          </NCard.TitleRoot>
+        </NCard.Header>
+        <NCard.Content>
+          <div className="flex flex-wrap gap-12px">
+            {sizes.map((size, index) => (
+              <NButton
+                color={richColors[index % richColors.length]}
                 key={size}
                 size={size}
-                variant="outline"
-                onClick={() => showToastWithSize(size)}
+                variant="soft"
+                onClick={() =>
+                  toast({
+                    title: `Size ${size}`,
+                    description: `This toast uses size: ${size}`,
+                    iconType: 'success',
+                    size
+                  })
+                }
               >
                 {size}
               </NButton>
@@ -157,122 +113,259 @@ function ToastDemo() {
         </NCard.Content>
       </NCard>
 
-      {/* 带操作的 Toast */}
+      {/* Duration */}
       <NCard split>
         <NCard.Header>
           <NCard.TitleRoot>
-            <NCard.Title>带操作按钮</NCard.Title>
+            <NCard.Title>Duration</NCard.Title>
           </NCard.TitleRoot>
         </NCard.Header>
         <NCard.Content>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-12px">
+            {durations.map((duration, index) => (
+              <NButton
+                color={richColors[index]}
+                key={duration}
+                variant="dashed"
+                onClick={() =>
+                  toast({
+                    title: `Duration ${duration}ms`,
+                    description: `This toast will last ${duration / 1000} seconds`,
+                    iconType: 'info',
+                    duration
+                  })
+                }
+              >
+                {duration}ms
+              </NButton>
+            ))}
+          </div>
+        </NCard.Content>
+      </NCard>
+
+      {/* With Action */}
+      <NCard split>
+        <NCard.Header>
+          <NCard.TitleRoot>
+            <NCard.Title>With Action</NCard.Title>
+          </NCard.TitleRoot>
+        </NCard.Header>
+        <NCard.Content>
+          <div className="flex flex-wrap gap-12px">
             <NButton
               color="primary"
-              onClick={showToastWithAction}
+              onClick={() =>
+                toast({
+                  title: 'Action Toast',
+                  description: 'This toast has an action button',
+                  iconType: 'info',
+                  action: <Toast.Action altText="View details">View</Toast.Action>
+                })
+              }
             >
-              显示带操作的 Toast
+              Simple Action
+            </NButton>
+            <NButton
+              color="success"
+              variant="outline"
+              onClick={() =>
+                toast({
+                  title: 'Success Action',
+                  description: 'Operation completed successfully',
+                  iconType: 'success',
+                  richColor: 'success',
+                  action: <Toast.Action altText="Continue">Continue</Toast.Action>
+                })
+              }
+            >
+              Success Action
+            </NButton>
+            <NButton
+              color="destructive"
+              variant="soft"
+              onClick={() =>
+                toast({
+                  title: 'Error Action',
+                  description: 'Something went wrong',
+                  iconType: 'destructive',
+                  richColor: 'destructive',
+                  action: <Toast.Action altText="Retry">Retry</Toast.Action>
+                })
+              }
+            >
+              Error Action
             </NButton>
           </div>
         </NCard.Content>
       </NCard>
 
-      {/* 自定义样式示例 */}
+      {/* Type (Accessibility) */}
       <NCard split>
         <NCard.Header>
           <NCard.TitleRoot>
-            <NCard.Title>自定义样式</NCard.Title>
+            <NCard.Title>Type (Accessibility)</NCard.Title>
           </NCard.TitleRoot>
         </NCard.Header>
         <NCard.Content>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-12px">
             <NButton
-              variant="outline"
-              onClick={() => {
+              color="primary"
+              onClick={() =>
                 toast({
-                  title: '自定义样式 Toast',
-                  description: '这个 toast 使用了自定义的样式配置。',
-                  iconType: 'success'
+                  title: 'Foreground Toast',
+                  description: 'High priority notification',
+                  iconType: 'info',
+                  type: 'foreground'
+                })
+              }
+            >
+              Foreground
+            </NButton>
+            <NButton
+              color="secondary"
+              variant="outline"
+              onClick={() =>
+                toast({
+                  title: 'Background Toast',
+                  description: 'Low priority notification',
+                  iconType: 'info',
+                  type: 'background'
+                })
+              }
+            >
+              Background
+            </NButton>
+          </div>
+        </NCard.Content>
+      </NCard>
+
+      {/* Combined Examples */}
+      <NCard split>
+        <NCard.Header>
+          <NCard.TitleRoot>
+            <NCard.Title>Combined Examples</NCard.Title>
+          </NCard.TitleRoot>
+        </NCard.Header>
+        <NCard.Content>
+          <div className="flex flex-wrap gap-12px">
+            <NButton
+              color="success"
+              onClick={() =>
+                toast({
+                  title: 'Upload Complete',
+                  description: 'Your file has been uploaded successfully',
+                  iconType: 'success',
+                  richColor: 'success',
+                  size: 'lg',
+                  duration: 8000,
+                  action: (
+                    <Toast.Action
+                      altText="Open file"
+                      onClick={() => {
+                        console.warn('Open file');
+                      }}
+                    >
+                      Open
+                    </Toast.Action>
+                  )
+                })
+              }
+            >
+              Upload Success
+            </NButton>
+            <NButton
+              color="warning"
+              variant="outline"
+              onClick={() =>
+                toast({
+                  title: 'Connection Lost',
+                  description: 'Please check your internet connection',
+                  iconType: 'warning',
+                  richColor: 'warning',
+                  size: 'md',
+                  duration: 10000,
+                  action: (
+                    <Toast.Action
+                      altText="Retry connection"
+                      onClick={() => {
+                        console.warn('Retry connection');
+                      }}
+                    >
+                      Retry
+                    </Toast.Action>
+                  )
+                })
+              }
+            >
+              Warning Toast
+            </NButton>
+            <NButton
+              color="destructive"
+              variant="dashed"
+              onClick={() =>
+                toast({
+                  title: 'Delete Failed',
+                  description: 'Unable to delete the selected items',
+                  iconType: 'destructive',
+                  richColor: 'destructive',
+                  size: 'sm',
+                  duration: 15000,
+                  action: (
+                    <Toast.Action
+                      altText="Try again"
+                      onClick={() => {
+                        console.warn('Try again');
+                      }}
+                    >
+                      Try Again
+                    </Toast.Action>
+                  )
+                })
+              }
+            >
+              Error Toast
+            </NButton>
+          </div>
+        </NCard.Content>
+      </NCard>
+
+      {/* Control */}
+      <NCard split>
+        <NCard.Header>
+          <NCard.TitleRoot>
+            <NCard.Title>Control</NCard.Title>
+          </NCard.TitleRoot>
+        </NCard.Header>
+        <NCard.Content>
+          <div className="flex flex-wrap gap-12px">
+            <NButton
+              color="info"
+              variant="ghost"
+              onClick={() => {
+                // Show multiple toasts with different delays
+                [1, 2, 3].forEach((num, index) => {
+                  setTimeout(() => {
+                    toast({
+                      title: `Toast ${num}`,
+                      description: `This is toast number ${num}`,
+                      iconType: iconTypes[index % iconTypes.length],
+                      richColor: richColors[index % richColors.length]
+                    });
+                  }, index * 500);
                 });
               }}
             >
-              自定义样式
+              Multiple Toasts
             </NButton>
-          </div>
-        </NCard.Content>
-      </NCard>
-
-      {/* 复杂场景示例 */}
-      <NCard split>
-        <NCard.Header>
-          <NCard.TitleRoot>
-            <NCard.Title>复杂场景</NCard.Title>
-          </NCard.TitleRoot>
-        </NCard.Header>
-        <NCard.Content>
-          <div className="space-y-3">
-            <p className="text-sm text-gray-600">模拟真实应用场景中的 toast 使用</p>
-            <div className="flex flex-wrap gap-3">
-              <NButton
-                color="success"
-                onClick={() => {
-                  toast({
-                    title: '保存成功',
-                    description: '您的更改已成功保存到服务器。',
-                    iconType: 'success'
-                  });
-                }}
-              >
-                保存成功
-              </NButton>
-              <NButton
-                color="destructive"
-                onClick={() => {
-                  toast({
-                    title: '操作失败',
-                    description: '网络连接失败，请检查您的网络设置后重试。',
-                    iconType: 'destructive',
-                    action: (
-                      <NButton
-                        size="sm"
-                        variant="outline"
-                        onClick={() => {
-                          // 模拟重试操作
-                          toast({
-                            title: '正在重试...',
-                            description: '正在重新连接服务器。',
-                            iconType: 'info'
-                          });
-                        }}
-                      >
-                        重试
-                      </NButton>
-                    )
-                  });
-                }}
-              >
-                模拟错误
-              </NButton>
-              <NButton
-                color="warning"
-                onClick={() => {
-                  toast({
-                    title: '权限警告',
-                    description: '您没有足够的权限执行此操作，请联系管理员。',
-                    iconType: 'warning',
-                    action: (
-                      <NButton
-                        size="sm"
-                        variant="outline"
-                        onClick={() => console.log('联系管理员功能')}
-                      >
-                        联系管理员
-                      </NButton>
-                    )
-                  });
-                }}
-              >
-                权限警告
-              </NButton>
+            <NButton
+              color="carbon"
+              variant="soft"
+              onClick={() => dismiss()}
+            >
+              Dismiss All
+            </NButton>
+            <div className="flex-c-center rounded bg-gray-50 px-3 py-2">
+              <span className="text-12px text-gray-600 font-medium">Active: {toasts.length}</span>
             </div>
           </div>
         </NCard.Content>
@@ -281,13 +374,17 @@ function ToastDemo() {
   );
 }
 
-export default function Toast() {
+export default function ToastExample() {
   return (
-    <ToastProvider
-      toastLimit={5}
-      toastRemoveDelay={5000}
+    <Toast.Provider
+      duration={5000}
+      label="Notification"
+      swipeDirection="right"
+      toastLimit={10}
     >
-      <ToastDemo />
-    </ToastProvider>
+      <div className="min-h-screen bg-gray-50 p-6">
+        <ToastExamples />
+      </div>
+    </Toast.Provider>
   );
 }

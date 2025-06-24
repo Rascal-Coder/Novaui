@@ -56,6 +56,6 @@
     "pre-commit": "pnpm check:type && pnpm lint-staged"
   },
   "lint-staged": {
-    "!packages/primitives/**": "eslint --fix"
+    "*": "eslint --fix"
   }
 }

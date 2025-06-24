@@ -1,123 +1,69 @@
-import React, { createContext, useCallback, useContext, useMemo, useRef, useState } from 'react';
+import { type ReactNode, createContext, useCallback, useContext, useReducer, useRef } from 'react';
 
 import type { Action, ToastState, UseToastReturn } from './types';
 
 interface ToastContextValue {
   toasts: ToastState[];
-  toastTimeouts: Map<string, ReturnType<typeof setTimeout>>;
-  addToRemoveQueue: (toastId: string) => void;
-  dispatch: (action: Action) => void;
-  toast: (props: Omit<ToastState, 'id'>) => {
-    id: string;
-    dismiss: () => void;
-    update: (props: ToastState) => void;
-  };
+  toast: (props: Omit<ToastState, 'id'>) => { id: string; dismiss: () => void; update: (props: ToastState) => void };
+  dismiss: (toastId?: string) => void;
 }
 
 const ToastContext = createContext<ToastContextValue | null>(null);
 
-export function ToastProvider({
-  children,
-  toastLimit = 1,
-  toastRemoveDelay = 1000 * 1000
-}: {
-  children: React.ReactNode;
+interface ToastProviderProps {
+  children: ReactNode;
   toastLimit?: number;
   toastRemoveDelay?: number;
-}) {
-  const [toasts, setToasts] = useState<ToastState[]>([]);
-  const toastTimeouts = useRef(new Map<string, ReturnType<typeof setTimeout>>());
-  const count = useRef(0);
+}
+
+function toastReducer(state: ToastState[], action: Action): ToastState[] {
+  switch (action.type) {
+    case 'add':
+      return [action.toast, ...state];
+    case 'update':
+      return state.map(t => (t.id === action.toast.id ? { ...t, ...action.toast } : t));
+    case 'dismiss':
+      return state.map(t =>
+        t.id === action.toastId || action.toastId === undefined
+          ? {
+              ...t,
+              open: false
+            }
+          : t
+      );
+    case 'remove':
+      return action.toastId ? state.filter(t => t.id !== action.toastId) : [];
+    default:
+      return state;
+  }
+}
+
+export function ToastContextProvider({ children, toastLimit = 5, toastRemoveDelay = 1000 }: ToastProviderProps) {
+  const [toasts, dispatch] = useReducer(toastReducer, []);
+  const toastTimeoutsRef = useRef(new Map<string, ReturnType<typeof setTimeout>>());
+  const countRef = useRef(0);
 
   const genId = useCallback(() => {
-    count.current = (count.current + 1) % Number.MAX_VALUE;
-    return count.current.toString();
+    countRef.current = (countRef.current + 1) % Number.MAX_VALUE;
+    return countRef.current.toString();
   }, []);
-
-  const addToast = useCallback(
-    (toastState: ToastState) => {
-      setToasts(prev => [toastState, ...prev].slice(0, toastLimit));
-    },
-    [toastLimit]
-  );
-
-  const updateToast = useCallback((updateProps: Partial<ToastState>) => {
-    setToasts(prev => prev.map(t => (t.id === updateProps.id ? { ...t, ...updateProps } : t)));
-  }, []);
-
-  const removeToast = useCallback((toastId?: string) => {
-    if (toastId) {
-      setToasts(prev => prev.filter(t => t.id !== toastId));
-    } else {
-      setToasts([]);
-    }
-  }, []);
-
-  const dispatchRef = useRef<((action: Action) => void) | null>(null);
 
   const addToRemoveQueue = useCallback(
     (toastId: string) => {
-      if (toastTimeouts.current.has(toastId)) return;
+      if (toastTimeoutsRef.current.has(toastId)) return;
 
       const timeout = setTimeout(() => {
-        toastTimeouts.current.delete(toastId);
-        if (dispatchRef.current) {
-          dispatchRef.current({
-            type: 'remove',
-            toastId
-          });
-        }
+        toastTimeoutsRef.current.delete(toastId);
+        dispatch({
+          type: 'remove',
+          toastId
+        });
       }, toastRemoveDelay);
 
-      toastTimeouts.current.set(toastId, timeout);
+      toastTimeoutsRef.current.set(toastId, timeout);
     },
     [toastRemoveDelay]
   );
-
-  const dismissToast = useCallback(
-    (toastId?: string) => {
-      if (toastId) {
-        addToRemoveQueue(toastId);
-      } else {
-        toasts.forEach(item => addToRemoveQueue(item.id));
-      }
-
-      setToasts(prev =>
-        prev.map(t =>
-          t.id === toastId || toastId === undefined
-            ? {
-                ...t,
-                open: false
-              }
-            : t
-        )
-      );
-    },
-    [addToRemoveQueue, toasts]
-  );
-
-  const dispatch = useCallback(
-    (action: Action) => {
-      switch (action.type) {
-        case 'add':
-          addToast(action.toast);
-          break;
-        case 'update':
-          updateToast(action.toast);
-          break;
-        case 'dismiss':
-          dismissToast(action.toastId);
-          break;
-        case 'remove':
-          removeToast(action.toastId);
-          break;
-        default:
-      }
-    },
-    [addToast, updateToast, dismissToast, removeToast]
-  );
-
-  dispatchRef.current = dispatch;
 
   const toast = useCallback(
     (props: Omit<ToastState, 'id'>) => {
@@ -129,7 +75,10 @@ export function ToastProvider({
           toast: { ...updateProps, id }
         });
 
-      const dismiss = () => dispatch({ type: 'dismiss', toastId: id });
+      const dismiss = () => {
+        dispatch({ type: 'dismiss', toastId: id });
+        addToRemoveQueue(id);
+      };
 
       dispatch({
         type: 'add',
@@ -151,35 +100,41 @@ export function ToastProvider({
         update
       };
     },
-    [genId, dispatch]
+    [genId, addToRemoveQueue]
   );
 
-  const contextValue = useMemo<ToastContextValue>(
-    () => ({
-      toasts,
-      toastTimeouts: toastTimeouts.current,
-      addToRemoveQueue,
-      dispatch,
-      toast
-    }),
-    [toasts, addToRemoveQueue, dispatch, toast]
+  const dismiss = useCallback(
+    (toastId?: string) => {
+      if (toastId) {
+        addToRemoveQueue(toastId);
+      } else {
+        toasts.forEach(item => addToRemoveQueue(item.id));
+      }
+
+      dispatch({ type: 'dismiss', toastId });
+    },
+    [toasts, addToRemoveQueue]
   );
 
-  return <ToastContext.Provider value={contextValue}>{children}</ToastContext.Provider>;
+  const value: ToastContextValue = {
+    toasts: toasts.slice(0, toastLimit),
+    toast,
+    dismiss
+  };
+
+  return <ToastContext.Provider value={value}>{children}</ToastContext.Provider>;
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useToast(): UseToastReturn {
   const context = useContext(ToastContext);
 
   if (!context) {
-    throw new Error('useToast must be used within a ToastProvider');
+    throw new Error('useToast must be used within a ToastContextProvider');
   }
 
-  const { toasts, toast, dispatch } = context;
-
   return {
-    toasts,
-    toast,
-    dismiss: (toastId?: string) => dispatch({ type: 'dismiss', toastId })
+    ...context,
+    toasts: context.toasts.filter(toast => toast.open !== false)
   };
 }

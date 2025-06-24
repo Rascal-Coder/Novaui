@@ -1,39 +1,33 @@
-import { Slot } from '@novaui/primitives';
+import { ToastClose as PrimitiveToastClose } from '@novaui/primitives';
 import { cn, toastVariants } from '@novaui/variants';
 import { X } from 'lucide-react';
-import React, { createContext, useContext, useMemo } from 'react';
+import React, { useMemo } from 'react';
 
-import { NButtonIcon } from '../button';
+import { NButton } from '../button';
 
 import type { ToastCloseProps } from './types';
 
-// 创建一个context来传递close函数
-export const ToastCloseContext = createContext<(() => void) | null>(null);
-
-export default function ToastClose({ className, size, children, onClick }: ToastCloseProps) {
+export default function ToastClose({ className, size, children, ...props }: ToastCloseProps) {
   const mergedClassName = useMemo(() => {
     const { close } = toastVariants({ size });
     return cn(close(), className);
   }, [size, className]);
 
-  const contextClose = useContext(ToastCloseContext);
-
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (onClick) {
-      onClick(e);
-    } else if (contextClose) {
-      contextClose();
-    }
-  };
-
   return (
-    <Slot className={mergedClassName}>
-      <NButtonIcon
-        fitContent
-        onClick={handleClick}
-      >
-        {children || <X />}
-      </NButtonIcon>
-    </Slot>
+    <PrimitiveToastClose
+      className={mergedClassName}
+      {...props}
+      asChild
+    >
+      {children || (
+        <NButton fitContent>
+          <X />
+        </NButton>
+      )}
+    </PrimitiveToastClose>
   );
 }
+
+// Context is no longer needed as primitives handle this internally
+// eslint-disable-next-line react-refresh/only-export-components
+export const ToastCloseContext = React.createContext<(() => void) | null>(null);

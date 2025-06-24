@@ -1,4 +1,4 @@
-import { Primitive } from '@novaui/primitives';
+import { ToastDescription as PrimitiveToastDescription } from '@novaui/primitives';
 import { cn, toastVariants } from '@novaui/variants';
 import { useMemo } from 'react';
 
@@ -11,11 +11,11 @@ export default function ToastDescription({ className, children, ...props }: Toas
   }, [className]);
 
   return (
-    <Primitive.div
+    <PrimitiveToastDescription
       className={mergedClassName}
       {...props}
     >
       {children}
-    </Primitive.div>
+    </PrimitiveToastDescription>
   );
 }
