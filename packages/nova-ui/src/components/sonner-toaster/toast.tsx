@@ -232,7 +232,7 @@ export const Toast = ({
           '--index': index,
           '--toasts-before': index,
           '--z-index': toasts.length - index,
-          '--offset': `${removed ? offsetBeforeRemove : offset.current}px`,
+          '--nova-sonner-toast-offset': `${removed ? offsetBeforeRemove : offset.current}px`,
           '--initial-height': expandByDefault ? 'auto' : `${initialHeight}px`
         } as CSSProperties
       }

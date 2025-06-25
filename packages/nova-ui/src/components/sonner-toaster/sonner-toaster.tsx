@@ -149,10 +149,10 @@ export const SonnerToaster = ({
             tabIndex={-1}
             style={
               {
-                '--front-toast-height': `${heights[0]?.height}px`,
-                '--offset': typeof offset === 'number' ? `${offset}px` : offset || VIEWPORT_OFFSET,
-                '--width': `${TOAST_WIDTH}px`,
-                '--gap': `${GAP}px`
+                '--nova-front-sonner-toast-height': `${heights[0]?.height}px`,
+                '--nova-sonner-toast-offset': typeof offset === 'number' ? `${offset}px` : offset || VIEWPORT_OFFSET,
+                '--nova-sonner-toast-width': `${TOAST_WIDTH}px`,
+                '--nova-sonner-toast-gap': `${GAP}px`
               } as CSSProperties
             }
             onMouseEnter={() => setExpanded(true)}
