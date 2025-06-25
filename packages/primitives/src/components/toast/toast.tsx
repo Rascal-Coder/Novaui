@@ -390,8 +390,8 @@ const Toast = React.forwardRef<ToastElement, ToastProps>((props: ScopedProps<Toa
   const [open, setOpen] = useControllableState({
     prop: openProp,
     defaultProp: defaultOpen ?? true,
-    onChange: onOpenChange,
-    caller: TOAST_NAME
+    onChange: onOpenChange
+    // caller: TOAST_NAME
   });
   return (
     <Presence present={forceMount || open}>

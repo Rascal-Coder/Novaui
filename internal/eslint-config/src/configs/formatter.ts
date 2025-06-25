@@ -67,7 +67,7 @@ export async function createFormatterConfig(
   }
 
   if (json) {
-    const jsonConfig = createPrettierFormatter([GLOB_JSON, GLOB_JSONC], 'json', ['prettier-plugin-json-sort']);
+    const jsonConfig = createPrettierFormatter([GLOB_JSON, GLOB_JSONC], 'json');
 
     // const jsonConfig = createPrettierFormatter([GLOB_JSON, GLOB_JSONC], 'json');
     const json5Config = createPrettierFormatter([GLOB_JSON5], 'json5');

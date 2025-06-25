@@ -8,7 +8,6 @@ interface UseControllableStateParams<T> {
   prop: T | undefined;
   defaultProp: T;
   onChange: ChangeHandler<T> | undefined;
-  caller: string;
 }
 
 interface AnyAction {
@@ -42,30 +41,11 @@ export function useControllableStateReducer<T, S extends {}, A extends AnyAction
   initialArg: any,
   init?: (i: any) => Omit<S, 'state'>
 ): [S & { state: T }, React.Dispatch<A>] {
-  const { prop: controlledState, defaultProp, onChange: onChangeProp, caller } = userArgs;
+  const { prop: controlledState, defaultProp, onChange: onChangeProp } = userArgs;
   const isControlled = controlledState !== undefined;
 
   const onChange = useEffectEvent(onChangeProp);
 
-  // OK to disable conditionally calling hooks here because they will always run
-  // consistently in the same environment. Bundlers should be able to remove the
-  // code block entirely in production.
-  /* eslint-disable react-hooks/rules-of-hooks */
-  // eslint-disable-next-line n/prefer-global/process
-  if (process.env.NODE_ENV !== 'production') {
-    const isControlledRef = React.useRef(controlledState !== undefined);
-    React.useEffect(() => {
-      const wasControlled = isControlledRef.current;
-      if (wasControlled !== isControlled) {
-        const from = wasControlled ? 'controlled' : 'uncontrolled';
-        const to = isControlled ? 'controlled' : 'uncontrolled';
-        console.warn(
-          `${caller} is changing from ${from} to ${to}. Components should not switch from controlled to uncontrolled (or vice versa). Decide between using a controlled or uncontrolled value for the lifetime of the component.`
-        );
-      }
-      isControlledRef.current = isControlled;
-    }, [isControlled, caller]);
-  }
   /* eslint-enable react-hooks/rules-of-hooks */
 
   type InternalState = S & { state: T };

@@ -1,3 +1,4 @@
+import { SonnerToaster } from 'nova-ui';
 import { Suspense, lazy } from 'react';
 import { Link, Navigate, Outlet, RouterProvider, createBrowserRouter } from 'react-router';
 
@@ -49,6 +50,7 @@ function Layout() {
       <main>
         <Outlet />
       </main>
+      <SonnerToaster />
     </div>
   );
 }

@@ -1,2 +1,3 @@
 export { SonnerToaster } from './sonner-toaster';
-export type { SonnerProps, SonnerToastT } from './types';
+export { toast } from './state';
+export type * from './types';

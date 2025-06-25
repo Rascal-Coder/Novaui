@@ -1,141 +1,227 @@
-import { useInsertionEffect, useMemo } from 'react';
-import { Toaster } from 'sonner';
+import type { CSSProperties } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import ReactDOM from 'react-dom';
 
-import type { SonnerProps } from './types';
+import { GAP, TOAST_WIDTH, VIEWPORT_OFFSET, VISIBLE_TOASTS_AMOUNT } from './constants';
+import { ToastState } from './state';
+import { Toast } from './toast';
+import type { HeightT, SonnerToastT, ToastPosition, ToastToDismiss, ToasterProps } from './types';
+import './style.css';
 
-interface SonnerToasterProps extends SonnerProps {
-  toastOptions?: SonnerProps['toastOptions'];
+function getDocumentDirection(): ToasterProps['dir'] {
+  if (typeof window === 'undefined') return 'ltr';
+  if (typeof document === 'undefined') return 'ltr'; // For Fresh purpose
+
+  const dirAttribute = document.documentElement.getAttribute('dir');
+
+  if (dirAttribute === 'auto' || !dirAttribute) {
+    return window.getComputedStyle(document.documentElement).direction as ToasterProps['dir'];
+  }
+
+  return dirAttribute as ToasterProps['dir'];
 }
 
-export function SonnerToaster({ toastOptions, ...delegatedProps }: SonnerToasterProps) {
-  const opts = useMemo<SonnerProps['toastOptions']>(
-    () => ({
-      ...toastOptions,
-      unstyled: true
-    }),
-    [toastOptions]
+export const SonnerToaster = ({
+  position = 'bottom-right',
+  hotkey = ['altKey', 'KeyT'],
+  expand = false,
+  offset,
+  duration,
+  visibleToasts = VISIBLE_TOASTS_AMOUNT,
+  toastOptions,
+  dir = getDocumentDirection(),
+  gap,
+  containerAriaLabel = 'Notifications'
+}: ToasterProps) => {
+  const [toasts, setToasts] = useState<SonnerToastT[]>([]);
+
+  // Changed
+  const possiblePositions = useMemo(() => {
+    return Array.from(
+      new Set(
+        [position].concat(toasts.map(toast => toast.position).filter((pos): pos is ToastPosition => pos !== undefined))
+      )
+    );
+  }, [toasts, position]);
+
+  const [heights, setHeights] = useState<HeightT[]>([]);
+  const [expanded, setExpanded] = useState(false);
+  const [interacting, setInteracting] = useState(false);
+
+  const listRef = useRef<HTMLOListElement>(null);
+  const hotkeyLabel = hotkey.join('+').replace(/Key/g, '').replace(/Digit/g, '');
+
+  const lastFocusedElementRef = useRef<HTMLElement | null>(null);
+  const isFocusWithinRef = useRef(false);
+
+  const removeToast = useCallback(
+    (toast: SonnerToastT) => setToasts(prevToasts => prevToasts.filter(({ id }) => id !== toast.id)),
+    []
   );
 
-  const css = `
-  [data-sonner-toaster][data-theme='dark'],
-  [data-sonner-toaster][data-theme='light'] {
-    --normal-bg: hsl(var(--background));
-    --normal-border: hsl(var(--border));
-    --normal-text: hsl(var(--foreground));
-    --border-radius: var(--radius - 2px);
-    --success-text: hsl(var(--success));
-    --info-text: hsl(var(--info));
-    --warning-text: hsl(var(--warning));
-    --error-text: hsl(var(--destructive));
-    pointer-events: auto;
-  }
-  [data-sonner-toast][data-type='success'] [data-icon] {
-    color: var(--success-text);
-  }
-  [data-sonner-toast][data-type='info'] [data-icon] {
-    color: var(--info-text);
-  }
-  [data-sonner-toast][data-type='warning'] [data-icon] {
-    color: var(--warning-text);
-  }
-  [data-sonner-toast][data-type='error'] [data-icon] {
-    color: var(--error-text);
-  }
-  [data-sonner-toast] {
-    display: flex;
-    align-items: center;
-    gap: 0.375rem;
-    width: var(--width);
-    padding: 1rem;
-    border: 1px solid hsl(var(--border));
-    border-radius: calc(var(--radius) - 2px);
-    background-color: hsl(var(--card));
-    color: hsl(var(--card-foreground));
-    box-shadow:
-      0 4px 6px -1px rgb(0 0 0 / 0.1),
-      0 2px 4px -2px rgb(0 0 0 / 0.1);
-  }
-  [data-sonner-toast][data-expanded='false'][data-front='false'] > * {
-    opacity: 0;
-  }
-  [data-sonner-toaster] [data-button] {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    height: 1.75rem;
-    padding: 0 0.75rem;
-    gap: 0.25rem;
-    font-size: 0.875rem;
-    line-height: 1.25rem;
-    font-weight: 500;
-    border-radius: calc(var(--radius) - 2px);
-    white-space: nowrap;
-  }
-  [data-sonner-toaster] [data-button]:focus-visible {
-    box-shadow: none;
-    outline-style: solid;
-    outline-width: 2px;
-    outline-offset: 2px;
-    outline-color: hsl(var(--primary));
-  }
-  [data-sonner-toaster] [data-button]:disabled {
-    pointer-events: none;
-    opacity: 0.5;
-  }
-  [data-sonner-toaster] [data-button][data-action] {
-    background-color: hsl(var(--primary));
-    color: hsl(var(--primary-foreground));
-  }
-  [data-sonner-toaster] [data-button][data-action]:hover {
-    background-color: hsl(var(--background) / 0.8);
-  }
-  [data-sonner-toaster] [data-button][data-action]:active {
-    background-color: hsl(var(--primary-600));
-  }
-  [data-sonner-toaster] [data-button][data-cancel] {
-    border: 1px solid hsl(var(--border));
-    background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
-  }
-  [data-sonner-toaster] [data-button][data-cancel]:hover {
-    border-color: hsl(var(--primary));
-    color: hsl(var(--primary));
-  }
-  [data-sonner-toaster] [data-button][data-cancel]:active {
-    box-shadow:
-      0 4px 6px -1px rgb(0 0 0 / 0.1),
-      0 2px 4px -2px rgb(0 0 0 / 0.1);
-  }
-  `;
-  // 使用 React 官方的 useInsertionEffect hook 来注入 CSS 样式
-  // 这是专门为 CSS-in-JS 库设计的 hook，会在布局计算之前同步执行
-  useInsertionEffect(() => {
-    const styleId = 'sonner-toaster-style';
-    let styleElement = document.getElementById(styleId) as HTMLStyleElement | null;
+  useEffect(() => {
+    return ToastState.subscribe(toast => {
+      if ((toast as ToastToDismiss).dismiss) {
+        setToasts(prevToasts => prevToasts.map(t => (t.id === toast.id ? { ...t, delete: true } : t)));
+        return;
+      }
 
-    if (!styleElement) {
-      styleElement = document.createElement('style');
-      styleElement.id = styleId;
-      document.head.appendChild(styleElement);
+      // Prevent batching, temp solution.
+      setTimeout(() => {
+        ReactDOM.flushSync(() => {
+          setToasts(prevToasts => {
+            const indexOfExistingToast = prevToasts.findIndex(t => t.id === toast.id);
+
+            // Update the toast if it already exists
+            if (indexOfExistingToast !== -1) {
+              return [
+                ...prevToasts.slice(0, indexOfExistingToast),
+                { ...prevToasts[indexOfExistingToast], ...toast },
+                ...prevToasts.slice(indexOfExistingToast + 1)
+              ] as SonnerToastT[];
+            }
+
+            return [toast, ...prevToasts] as SonnerToastT[];
+          });
+        });
+      });
+    });
+  }, []);
+
+  useEffect(() => {
+    // Ensure expanded is always false when no toasts are present / only one left
+    if (toasts.length <= 1) {
+      setExpanded(false);
     }
+  }, [toasts]);
 
-    styleElement.textContent = css;
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      const isHotkeyPressed = hotkey.every(key => (event as any)[key] || event.code === key);
 
-    return () => {
-      // 清理函数：当组件卸载时移除样式
-      const element = document.getElementById(styleId);
-      if (element && element.parentNode) {
-        element.parentNode.removeChild(element);
+      if (isHotkeyPressed) {
+        setExpanded(true);
+        listRef.current?.focus();
+      }
+
+      if (
+        event.code === 'Escape' &&
+        (document.activeElement === listRef.current || listRef.current?.contains(document.activeElement))
+      ) {
+        setExpanded(false);
       }
     };
-  }, [css]);
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [hotkey]);
+
+  useEffect(() => {
+    if (listRef.current) {
+      return () => {
+        if (lastFocusedElementRef.current) {
+          lastFocusedElementRef.current.focus({ preventScroll: true });
+          lastFocusedElementRef.current = null;
+          isFocusWithinRef.current = false;
+        }
+      };
+    }
+  }, [listRef.current]);
+
+  if (!toasts.length) return null;
 
   return (
-    <Toaster
-      {...delegatedProps}
-      toastOptions={opts}
-    />
-  );
-}
+    // Remove item from normal navigation flow, only available via hotkey
+    <section
+      aria-label={`${containerAriaLabel} ${hotkeyLabel}`}
+      tabIndex={-1}
+    >
+      {possiblePositions.map((toastPosition, positionIndex) => {
+        const [y, x] = toastPosition.split('-');
+        return (
+          <ol
+            data-sonner-toaster
+            data-x-position={x}
+            data-y-position={y}
+            dir={dir === 'auto' ? getDocumentDirection() : dir}
+            key={toastPosition}
+            ref={listRef}
+            tabIndex={-1}
+            style={
+              {
+                '--front-toast-height': `${heights[0]?.height}px`,
+                '--offset': typeof offset === 'number' ? `${offset}px` : offset || VIEWPORT_OFFSET,
+                '--width': `${TOAST_WIDTH}px`,
+                '--gap': `${GAP}px`
+              } as CSSProperties
+            }
+            onMouseEnter={() => setExpanded(true)}
+            onMouseMove={() => setExpanded(true)}
+            onPointerUp={() => setInteracting(false)}
+            onBlur={event => {
+              if (isFocusWithinRef.current && !event.currentTarget.contains(event.relatedTarget)) {
+                isFocusWithinRef.current = false;
+                if (lastFocusedElementRef.current) {
+                  lastFocusedElementRef.current.focus({ preventScroll: true });
+                  lastFocusedElementRef.current = null;
+                }
+              }
+            }}
+            onFocus={event => {
+              const isNotDismissible =
+                event.target instanceof HTMLElement && event.target.dataset.dismissible === 'false';
 
-SonnerToaster.displayName = 'SonnerToaster';
+              if (isNotDismissible) return;
+
+              if (!isFocusWithinRef.current) {
+                isFocusWithinRef.current = true;
+                lastFocusedElementRef.current = event.relatedTarget as HTMLElement;
+              }
+            }}
+            onMouseLeave={() => {
+              // Avoid setting expanded to false when interacting with a toast, e.g. swiping
+              if (!interacting) {
+                setExpanded(false);
+              }
+            }}
+            onPointerDown={event => {
+              const isNotDismissible =
+                event.target instanceof HTMLElement && event.target.dataset.dismissible === 'false';
+
+              if (isNotDismissible) return;
+              setInteracting(true);
+            }}
+          >
+            {toasts
+              .filter(toast => (!toast.position && positionIndex === 0) || toast.position === toastPosition)
+              .map((toast, toastIndex) => (
+                <Toast
+                  duration={toastOptions?.duration ?? duration}
+                  expandByDefault={expand}
+                  expanded={expanded}
+                  gap={gap}
+                  index={toastIndex}
+                  interacting={interacting}
+                  key={toast.id}
+                  position={toastPosition}
+                  removeToast={removeToast}
+                  setHeights={setHeights}
+                  severity={toast.severity}
+                  toast={toast}
+                  toastDefaults={toastOptions}
+                  variant={toast.variant}
+                  visibleToasts={visibleToasts}
+                  heights={heights.filter(
+                    h => (!h.position && toastPosition === position) || h.position === toastPosition
+                  )}
+                  toasts={toasts.filter(
+                    t => (!t.position && toastPosition === position) || t.position === toastPosition
+                  )}
+                />
+              ))}
+          </ol>
+        );
+      })}
+    </section>
+  );
+};

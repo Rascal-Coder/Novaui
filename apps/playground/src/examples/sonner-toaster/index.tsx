@@ -1,11 +1,6 @@
-import { NButton, NCard, NCardContent, NCardHeader, NCardTitle, SonnerToaster } from 'nova-ui';
-import type { SonnerProps } from 'nova-ui';
-import { useState } from 'react';
-import { toast } from 'sonner';
+import { NButton, NCard, toast } from 'nova-ui';
 
 export default function SonnerToasterExample() {
-  const [position, setPosition] = useState<SonnerProps['position']>('top-right');
-
   function openDefaultToast() {
     toast('Event has been created');
   }
@@ -33,11 +28,33 @@ export default function SonnerToasterExample() {
   }
 
   function openLoadingToast() {
-    const id = toast.loading('Event has been created');
+    // 1. 显示loading状态
+    const id = toast.loading('Uploading file...');
 
+    // 2. 模拟异步操作
     setTimeout(() => {
-      toast.dismiss(id);
-    }, 2000);
+      // 3. 更新为成功状态
+      toast.success('File uploaded successfully!', { id });
+    }, 3000);
+  }
+
+  function openPromiseToast() {
+    const myPromise = () =>
+      new Promise((resolve, reject) => {
+        setTimeout(() => {
+          if (Math.random() > 0.5) {
+            resolve({ name: 'Event data' });
+          } else {
+            reject(new Error('Failed to create event'));
+          }
+        }, 2000);
+      });
+
+    toast.promise(myPromise, {
+      loading: 'Creating event...',
+      success: (data: any) => `Event "${data.name}" has been created successfully!`,
+      error: (error: Error) => `Error: ${error.message}`
+    });
   }
 
   function openToastWithAction() {
@@ -45,40 +62,101 @@ export default function SonnerToasterExample() {
       action: {
         label: 'Confirm',
         onClick: () => {
-          console.log('View event');
+          // eslint-disable-next-line no-alert
+          window.alert('View event');
         }
       },
-      cancel: {
-        label: 'Cancel',
-        onClick: () => {
-          console.log('Cancel');
-        }
-      }
+      closeButton: true
     });
   }
 
-  const positionOptions = [
-    { label: 'Top Left', value: 'top-left' as const },
-    { label: 'Top Center', value: 'top-center' as const },
-    { label: 'Top Right', value: 'top-right' as const },
-    { label: 'Bottom Left', value: 'bottom-left' as const },
-    { label: 'Bottom Center', value: 'bottom-center' as const },
-    { label: 'Bottom Right', value: 'bottom-right' as const }
-  ];
+  function openManualCloseToast() {
+    const id = toast('This toast will close in 3 seconds', {
+      duration: Infinity, // 不自动关闭
+      closeButton: false, // 不显示关闭按钮
+      description: 'Manually controlled toast'
+    });
+
+    // 3秒后手动关闭
+    setTimeout(() => {
+      toast.dismiss(id);
+    }, 3000);
+  }
+
+  function openPersistentToast() {
+    toast.info('This toast stays until manually closed', {
+      duration: Infinity,
+      closeButton: true,
+      description: 'Click the X button to close'
+    });
+  }
+
+  function openNonDismissibleToast() {
+    toast.warning('Important: Cannot be closed!', {
+      duration: 5000, // 5秒后自动关闭
+      dismissible: false, // 不能手动关闭
+      description: 'This toast cannot be dismissed manually'
+    });
+  }
+
+  function dismissAllToasts() {
+    toast.dismiss(); // 关闭所有toast
+  }
+
+  function createMultipleToasts() {
+    // 快速创建多个toast来展示重叠效果
+    toast.info('First toast - This is the front toast');
+    setTimeout(() => toast.success('Second toast - Behind the first'), 1000);
+    setTimeout(() => toast.warning('Third toast - Further behind'), 2000);
+    setTimeout(() => toast.error('Fourth toast - At the back'), 3000);
+    setTimeout(() => toast('Fifth toast - Last one'), 4000);
+  }
+
+  // 位置演示函数
+  function openTopLeftToast() {
+    toast.info('Top Left Toast', { position: 'top-left' });
+  }
+
+  function openTopCenterToast() {
+    toast.success('Top Center Toast', { position: 'top-center' });
+  }
+
+  function openTopRightToast() {
+    toast.warning('Top Right Toast', { position: 'top-right' });
+  }
+
+  function openBottomLeftToast() {
+    toast.error('Bottom Left Toast', { position: 'bottom-left' });
+  }
+
+  function openBottomCenterToast() {
+    toast('Bottom Center Toast', { position: 'bottom-center' });
+  }
+
+  function openBottomRightToast() {
+    toast.info('Bottom Right Toast', { position: 'bottom-right' });
+  }
+
+  function showAllPositions() {
+    // 同时显示所有位置的toast
+    toast.info('Top Left', { position: 'top-left', duration: 5000 });
+    toast.success('Top Center', { position: 'top-center', duration: 5000 });
+    toast.warning('Top Right', { position: 'top-right', duration: 5000 });
+    toast.error('Bottom Left', { position: 'bottom-left', duration: 5000 });
+    toast('Bottom Center', { position: 'bottom-center', duration: 5000 });
+    toast.info('Bottom Right', { position: 'bottom-right', duration: 5000 });
+  }
 
   return (
     <div className="flex-c gap-4">
-      <SonnerToaster
-        closeButton
-        position={position}
-      />
-
-      {/* Type Card */}
-      <NCard>
-        <NCardHeader>
-          <NCardTitle>Type</NCardTitle>
-        </NCardHeader>
-        <NCardContent>
+      {/* Toast Types */}
+      <NCard split>
+        <NCard.Header>
+          <NCard.TitleRoot>
+            <NCard.Title>Toast Types</NCard.Title>
+          </NCard.TitleRoot>
+        </NCard.Header>
+        <NCard.Content>
           <div className="flex flex-wrap gap-3">
             <NButton
               variant="outline"
@@ -116,63 +194,203 @@ export default function SonnerToasterExample() {
             >
               Loading
             </NButton>
-          </div>
-        </NCardContent>
-      </NCard>
-
-      {/* With Description Card */}
-      <NCard>
-        <NCardHeader>
-          <NCardTitle>With Description</NCardTitle>
-        </NCardHeader>
-        <NCardContent>
-          <NButton
-            variant="outline"
-            onClick={openToastWithDescription}
-          >
-            Open
-          </NButton>
-        </NCardContent>
-      </NCard>
-
-      {/* With Action Card */}
-      <NCard>
-        <NCardHeader>
-          <NCardTitle>With Action</NCardTitle>
-        </NCardHeader>
-        <NCardContent>
-          <NButton
-            variant="outline"
-            onClick={openToastWithAction}
-          >
-            Open
-          </NButton>
-        </NCardContent>
-      </NCard>
-
-      {/* Position Card */}
-      <NCard>
-        <NCardHeader>
-          <NCardTitle>Position</NCardTitle>
-        </NCardHeader>
-        <NCardContent>
-          <div className="w-40">
-            <select
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={position}
-              onChange={e => setPosition(e.target.value as SonnerProps['position'])}
+            <NButton
+              variant="outline"
+              onClick={openPromiseToast}
             >
-              {positionOptions.map(option => (
-                <option
-                  key={option.value}
-                  value={option.value}
-                >
-                  {option.label}
-                </option>
-              ))}
-            </select>
+              Promise
+            </NButton>
+            <NButton
+              variant="solid"
+              onClick={createMultipleToasts}
+            >
+              Multiple Toasts
+            </NButton>
           </div>
-        </NCardContent>
+        </NCard.Content>
+      </NCard>
+
+      {/* Advanced Features */}
+      <NCard split>
+        <NCard.Header>
+          <NCard.TitleRoot>
+            <NCard.Title>Advanced Features</NCard.Title>
+          </NCard.TitleRoot>
+        </NCard.Header>
+        <NCard.Content className="flex flex-col gap-4">
+          {/* With Description */}
+          <NCard>
+            <NCard.Header>
+              <NCard.TitleRoot>
+                <NCard.Title>With Description</NCard.Title>
+              </NCard.TitleRoot>
+            </NCard.Header>
+            <NCard.Content>
+              <NButton
+                variant="outline"
+                onClick={openToastWithDescription}
+              >
+                Show Toast with Description
+              </NButton>
+            </NCard.Content>
+          </NCard>
+
+          {/* With Action */}
+          <NCard>
+            <NCard.Header>
+              <NCard.TitleRoot>
+                <NCard.Title>With Action Buttons</NCard.Title>
+              </NCard.TitleRoot>
+            </NCard.Header>
+            <NCard.Content>
+              <NButton
+                variant="outline"
+                onClick={openToastWithAction}
+              >
+                Show Toast with Actions
+              </NButton>
+            </NCard.Content>
+          </NCard>
+        </NCard.Content>
+      </NCard>
+
+      {/* Close Functions */}
+      <NCard split>
+        <NCard.Header>
+          <NCard.TitleRoot>
+            <NCard.Title>Close Functions</NCard.Title>
+          </NCard.TitleRoot>
+        </NCard.Header>
+        <NCard.Content className="flex flex-col gap-4">
+          {/* Manual Close */}
+          <NCard>
+            <NCard.Header>
+              <NCard.TitleRoot>
+                <NCard.Title>Manual Close</NCard.Title>
+              </NCard.TitleRoot>
+            </NCard.Header>
+            <NCard.Content>
+              <div className="flex gap-3">
+                <NButton
+                  variant="outline"
+                  onClick={openManualCloseToast}
+                >
+                  Auto Close (3s)
+                </NButton>
+                <NButton
+                  variant="outline"
+                  onClick={openPersistentToast}
+                >
+                  Persistent Toast
+                </NButton>
+              </div>
+            </NCard.Content>
+          </NCard>
+
+          {/* Dismissible Control */}
+          <NCard>
+            <NCard.Header>
+              <NCard.TitleRoot>
+                <NCard.Title>Dismissible Control</NCard.Title>
+              </NCard.TitleRoot>
+            </NCard.Header>
+            <NCard.Content>
+              <div className="flex gap-3">
+                <NButton
+                  variant="outline"
+                  onClick={openNonDismissibleToast}
+                >
+                  Non-Dismissible
+                </NButton>
+                <NButton
+                  variant="solid"
+                  onClick={dismissAllToasts}
+                >
+                  Close All Toasts
+                </NButton>
+              </div>
+            </NCard.Content>
+          </NCard>
+        </NCard.Content>
+      </NCard>
+
+      {/* Position Examples */}
+      <NCard split>
+        <NCard.Header>
+          <NCard.TitleRoot>
+            <NCard.Title>Position Examples</NCard.Title>
+          </NCard.TitleRoot>
+        </NCard.Header>
+        <NCard.Content className="flex flex-col gap-4">
+          {/* Individual Positions */}
+          <NCard>
+            <NCard.Header>
+              <NCard.TitleRoot>
+                <NCard.Title>Individual Positions</NCard.Title>
+              </NCard.TitleRoot>
+            </NCard.Header>
+            <NCard.Content>
+              <div className="flex gap-3">
+                <NButton
+                  variant="outline"
+                  onClick={openTopLeftToast}
+                >
+                  Top Left
+                </NButton>
+                <NButton
+                  variant="outline"
+                  onClick={openTopCenterToast}
+                >
+                  Top Center
+                </NButton>
+                <NButton
+                  variant="outline"
+                  onClick={openTopRightToast}
+                >
+                  Top Right
+                </NButton>
+                <NButton
+                  variant="outline"
+                  onClick={openBottomLeftToast}
+                >
+                  Bottom Left
+                </NButton>
+                <NButton
+                  variant="outline"
+                  onClick={openBottomCenterToast}
+                >
+                  Bottom Center
+                </NButton>
+                <NButton
+                  variant="outline"
+                  onClick={openBottomRightToast}
+                >
+                  Bottom Right
+                </NButton>
+              </div>
+            </NCard.Content>
+          </NCard>
+
+          {/* Show All Positions */}
+          <NCard>
+            <NCard.Header>
+              <NCard.TitleRoot>
+                <NCard.Title>All Positions Demo</NCard.Title>
+              </NCard.TitleRoot>
+            </NCard.Header>
+            <NCard.Content>
+              <NButton
+                variant="solid"
+                onClick={showAllPositions}
+              >
+                Show All Positions (5s duration)
+              </NButton>
+              <p className="mt-2 text-sm text-gray-500 dark:text-neutral-400">
+                This will show toasts in all 6 positions simultaneously
+              </p>
+            </NCard.Content>
+          </NCard>
+        </NCard.Content>
       </NCard>
     </div>
   );
