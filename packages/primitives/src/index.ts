@@ -1,4 +1,7 @@
 export * from './components/compose-refs';
+export * from './components/accordion';
+export * from './components/collapsible';
+export * from './components/direction';
 export * from './components/dismissable-layer';
 export * from './components/portal';
 export * from './components/primitive';

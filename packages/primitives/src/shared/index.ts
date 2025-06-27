@@ -7,3 +7,4 @@ export * from './use-controllable-state';
 export * from './presence';
 export * from './use-callback-ref';
 export * from './use-escape-keydown';
+export * from './id';
