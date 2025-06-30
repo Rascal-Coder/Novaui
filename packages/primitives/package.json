@@ -46,6 +46,8 @@
     "vite-plugin-dts": "4.5.3"
   },
   "dependencies": {
+    "aria-hidden": "^1.2.4",
+    "react-remove-scroll": "^2.6.3",
     "use-sync-external-store": "^1.5.0"
   }
 }
