@@ -6,6 +6,7 @@ type AvatarUISlots = {
 };
 
 type AvatarProps = {
+  shape?: 'circle' | 'square';
   // className?: string;
   size?: ThemeSize;
   ui?: AvatarUISlots;

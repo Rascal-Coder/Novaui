@@ -1,5 +1,5 @@
-import { User } from 'lucide-react';
-import { NAvatar, NAvatarFallback, NAvatarImage, NCard } from 'nova-ui';
+// import { User } from 'lucide-react';
+import { NAvatar, NCard } from 'nova-ui';
 import { useState } from 'react';
 
 export default function AvatarExample() {
@@ -17,33 +17,54 @@ export default function AvatarExample() {
         <NCard.Content>
           <div className="flex items-center gap-6">
             <div className="flex-c-center gap-2">
-              <NAvatar fallbackLabel="JD" />
-              <div className="text-12px text-gray-500">仅后备文本</div>
+              <NAvatar
+                fallbackLabel="JD"
+                shape="circle"
+              />
+              <div className="text-12px text-gray-500">圆形文字</div>
+            </div>
+            <div className="flex-c-center gap-2">
+              <NAvatar
+                fallbackLabel="JD"
+                shape="square"
+              />
+              <div className="text-12px text-gray-500">方形文字</div>
             </div>
             <div className="flex-c-center gap-2">
               <NAvatar
                 alt="John Doe"
                 fallbackLabel="JD"
+                shape="circle"
                 src="https://github.com/shadcn.png"
               />
-              <div className="text-12px text-gray-500">带图片头像</div>
+              <div className="text-12px text-gray-500">圆形头像</div>
+            </div>
+            <div className="flex-c-center gap-2">
+              <NAvatar
+                alt="John Doe"
+                fallbackLabel="JD"
+                shape="square"
+                src="https://github.com/shadcn.png"
+              />
+              <div className="text-12px text-gray-500">方形头像</div>
             </div>
           </div>
         </NCard.Content>
       </NCard>
 
-      {/* 尺寸大小 */}
+      {/* 不同尺寸 */}
       <NCard split>
         <NCard.Header>
           <NCard.TitleRoot>
-            <NCard.Title>尺寸大小</NCard.Title>
+            <NCard.Title>不同尺寸</NCard.Title>
           </NCard.TitleRoot>
         </NCard.Header>
         <NCard.Content>
-          <div className="flex items-center gap-4">
+          <div className="flex items-end gap-6">
             <div className="flex-c-center gap-2">
               <NAvatar
                 fallbackLabel="XS"
+                shape="circle"
                 size="xs"
               />
               <div className="text-12px text-gray-500">xs</div>
@@ -51,6 +72,7 @@ export default function AvatarExample() {
             <div className="flex-c-center gap-2">
               <NAvatar
                 fallbackLabel="SM"
+                shape="circle"
                 size="sm"
               />
               <div className="text-12px text-gray-500">sm</div>
@@ -58,13 +80,15 @@ export default function AvatarExample() {
             <div className="flex-c-center gap-2">
               <NAvatar
                 fallbackLabel="MD"
+                shape="circle"
                 size="md"
               />
-              <div className="text-12px text-gray-500">md (默认)</div>
+              <div className="text-12px text-gray-500">md</div>
             </div>
             <div className="flex-c-center gap-2">
               <NAvatar
                 fallbackLabel="LG"
+                shape="circle"
                 size="lg"
               />
               <div className="text-12px text-gray-500">lg</div>
@@ -72,6 +96,7 @@ export default function AvatarExample() {
             <div className="flex-c-center gap-2">
               <NAvatar
                 fallbackLabel="XL"
+                shape="circle"
                 size="xl"
               />
               <div className="text-12px text-gray-500">xl</div>
@@ -79,6 +104,7 @@ export default function AvatarExample() {
             <div className="flex-c-center gap-2">
               <NAvatar
                 fallbackLabel="2XL"
+                shape="circle"
                 size="2xl"
               />
               <div className="text-12px text-gray-500">2xl</div>
@@ -87,68 +113,100 @@ export default function AvatarExample() {
         </NCard.Content>
       </NCard>
 
-      {/* 图片处理 */}
+      {/* 头像组合 */}
       <NCard split>
         <NCard.Header>
           <NCard.TitleRoot>
-            <NCard.Title>图片处理</NCard.Title>
+            <NCard.Title>头像组合</NCard.Title>
           </NCard.TitleRoot>
         </NCard.Header>
         <NCard.Content>
-          <div className="flex flex-col gap-6">
-            {/* 图片加载状态 */}
-            <div>
-              <div className="mb-3 text-sm text-gray-700 font-medium">图片加载状态监听</div>
-              <div className="flex items-center gap-4">
+          <div className="flex items-center gap-8">
+            {/* 堆叠头像组 */}
+            <div className="flex-c-center gap-4">
+              <div className="flex items-center">
                 <NAvatar
-                  alt="用户头像"
-                  fallbackLabel="用户"
-                  src="https://github.com/vercel.png"
-                  onLoadingStatusChange={status => setLoadingStatus(status)}
-                />
-                <div className="text-sm">
-                  <span className="text-gray-600">当前状态: </span>
-                  <span
-                    className={`font-medium ${(() => {
-                      if (loadingStatus === 'loaded') return 'text-green-600';
-                      if (loadingStatus === 'error') return 'text-red-600';
-                      if (loadingStatus === 'loading') return 'text-blue-600';
-                      return 'text-gray-600';
-                    })()}`}
-                  >
-                    {loadingStatus}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* 图片加载失败 */}
-            <div>
-              <div className="mb-3 text-sm text-gray-700 font-medium">图片加载失败时显示后备内容</div>
-              <div className="flex items-center gap-4">
-                <NAvatar
-                  alt="头像"
-                  fallbackLabel="FB"
-                  src="https://invalid-url.jpg"
-                />
-                <div className="text-12px text-gray-500">无效URL，显示后备文本</div>
-              </div>
-            </div>
-
-            {/* 图片属性 */}
-            <div>
-              <div className="mb-3 text-sm text-gray-700 font-medium">图片属性设置</div>
-              <div className="flex items-center gap-4">
-                <NAvatar
-                  alt="用户头像"
-                  crossOrigin="anonymous"
-                  fallbackLabel="用户"
-                  referrerPolicy="no-referrer"
+                  alt="User 1"
+                  className="border-2 border-white shadow-md"
+                  fallbackLabel="U1"
+                  size="md"
                   src="https://github.com/shadcn.png"
                 />
-                <div className="text-12px text-gray-500">设置crossOrigin和referrerPolicy</div>
+                <NAvatar
+                  alt="User 2"
+                  className="border-2 border-white shadow-md -ml-2"
+                  fallbackLabel="U2"
+                  size="md"
+                  src="https://i.pravatar.cc/150?img=1"
+                />
+                <NAvatar
+                  alt="User 3"
+                  className="border-2 border-white shadow-md -ml-2"
+                  fallbackLabel="U3"
+                  size="md"
+                  src="https://i.pravatar.cc/150?img=2"
+                />
+                <div className="ml-2 text-sm text-gray-600">+2</div>
               </div>
+              <div className="text-12px text-gray-500">堆叠头像组</div>
             </div>
+
+            {/* 垂直头像组 */}
+            <div className="flex-c-center gap-4">
+              <div className="flex-c gap-2">
+                <NAvatar
+                  alt="User 1"
+                  fallbackLabel="U1"
+                  size="sm"
+                  src="https://github.com/shadcn.png"
+                />
+                <NAvatar
+                  alt="User 2"
+                  fallbackLabel="U2"
+                  size="sm"
+                  src="https://i.pravatar.cc/150?img=3"
+                />
+                <NAvatar
+                  alt="User 3"
+                  fallbackLabel="U3"
+                  size="sm"
+                  src="https://i.pravatar.cc/150?img=4"
+                />
+              </div>
+              <div className="text-12px text-gray-500">垂直组合</div>
+            </div>
+          </div>
+        </NCard.Content>
+      </NCard>
+
+      {/* 加载状态 */}
+      <NCard split>
+        <NCard.Header>
+          <NCard.TitleRoot>
+            <NCard.Title>加载状态</NCard.Title>
+          </NCard.TitleRoot>
+        </NCard.Header>
+        <NCard.Content>
+          <div className="flex items-center gap-6">
+            <div className="flex-c-center gap-2">
+              <NAvatar
+                alt="Failed to load"
+                fallbackLabel="Error"
+                src="https://invalid-url.jpg"
+                onLoadingStatusChange={status => setLoadingStatus(status)}
+              />
+              <div className="text-12px text-gray-500">加载失败</div>
+            </div>
+            <div className="flex-c-center gap-2">
+              <NAvatar
+                alt="Loading success"
+                fallbackLabel="Load"
+                src="https://github.com/shadcn.png"
+                onLoadingStatusChange={status => console.log('Loading status:', status)}
+              />
+              <div className="text-12px text-gray-500">加载成功</div>
+            </div>
+            <div className="text-sm text-gray-600">当前状态: {loadingStatus}</div>
           </div>
         </NCard.Content>
       </NCard>
@@ -161,297 +219,100 @@ export default function AvatarExample() {
           </NCard.TitleRoot>
         </NCard.Header>
         <NCard.Content>
-          <div className="flex flex-col gap-6">
-            {/* 使用 ui prop */}
-            <div>
-              <div className="mb-3 text-sm text-gray-700 font-medium">使用 ui prop 自定义样式</div>
-              <div className="flex items-center gap-4">
-                <NAvatar
-                  fallbackLabel="UI"
-                  ui={{
-                    root: 'border-2 border-blue-500',
-                    fallback: 'bg-blue-100 text-blue-700 font-bold'
-                  }}
-                />
-                <NAvatar
-                  fallbackLabel="IMG"
-                  src="https://github.com/shadcn.png"
-                  ui={{
-                    root: 'border-2 border-purple-500',
-                    image: 'grayscale hover:grayscale-0 transition-all duration-300'
-                  }}
-                />
-                <div className="text-12px text-gray-500">自定义根容器、后备内容、图片样式</div>
-              </div>
+          <div className="flex items-center gap-6">
+            <div className="flex-c-center gap-2">
+              <NAvatar
+                fallbackLabel="VIP"
+                shape="circle"
+                size="lg"
+                ui={{
+                  root: 'ring-2 ring-yellow-400 ring-offset-2',
+                  fallback: 'bg-gradient-to-br from-yellow-400 to-orange-500 text-white font-bold'
+                }}
+              />
+              <div className="text-12px text-gray-500">VIP用户</div>
             </div>
-
-            {/* 使用 className */}
-            <div>
-              <div className="mb-3 text-sm text-gray-700 font-medium">使用 className 自定义根容器样式</div>
-              <div className="flex items-center gap-4">
+            <div className="flex-c-center gap-2">
+              <NAvatar
+                fallbackLabel="AI"
+                shape="square"
+                size="lg"
+                ui={{
+                  root: 'ring-2 ring-blue-400 ring-offset-2',
+                  fallback: 'bg-gradient-to-br from-blue-500 to-purple-600 text-white font-bold'
+                }}
+              />
+              <div className="text-12px text-gray-500">AI助手</div>
+            </div>
+            <div className="flex-c-center gap-2">
+              <div className="relative">
                 <NAvatar
-                  className="ring-2 ring-offset-2 ring-purple-500"
-                  fallbackLabel="CLS"
+                  alt="Online user"
+                  fallbackLabel="ON"
+                  size="lg"
+                  src="https://github.com/shadcn.png"
                 />
-                <NAvatar
-                  className="ring-2 ring-offset-2 ring-green-500 ring-offset-green-100"
-                  fallbackLabel="GRN"
-                  ui={{
-                    fallback: 'bg-green-100 text-green-700'
-                  }}
-                />
-                <div className="text-12px text-gray-500">使用ring效果和颜色主题</div>
+                <div className="absolute h-4 w-4 border-2 border-white rounded-full bg-green-500 -bottom-1 -right-1" />
               </div>
+              <div className="text-12px text-gray-500">在线状态</div>
             </div>
           </div>
         </NCard.Content>
       </NCard>
 
-      {/* 自定义内容 */}
+      {/* 带文字信息 */}
       <NCard split>
         <NCard.Header>
           <NCard.TitleRoot>
-            <NCard.Title>自定义内容</NCard.Title>
+            <NCard.Title>带文字信息</NCard.Title>
           </NCard.TitleRoot>
         </NCard.Header>
         <NCard.Content>
-          <div className="flex flex-col gap-6">
-            {/* 完全自定义内容 */}
-            <div>
-              <div className="mb-3 text-sm text-gray-700 font-medium">完全自定义内容</div>
-              <div className="flex items-center gap-4">
-                <NAvatar size="lg">
-                  <div className="h-full w-full flex items-center justify-center from-pink-400 to-purple-600 bg-gradient-to-br text-white font-bold">
-                    💎
-                  </div>
-                </NAvatar>
-                <NAvatar size="lg">
-                  <div className="h-full w-full flex items-center justify-center from-blue-400 to-cyan-600 bg-gradient-to-br text-xl text-white">
-                    🚀
-                  </div>
-                </NAvatar>
-                <div className="text-12px text-gray-500">渐变背景 + 图标</div>
+          <div className="flex-c gap-4">
+            <div className="flex items-center gap-3 border rounded-lg p-3">
+              <NAvatar
+                alt="John Doe"
+                fallbackLabel="JD"
+                size="md"
+                src="https://github.com/shadcn.png"
+              />
+              <div className="flex-c gap-1">
+                <div className="font-medium">John Doe</div>
+                <div className="text-sm text-gray-500">john@example.com</div>
               </div>
             </div>
 
-            {/* 自定义后备内容 */}
-            <div>
-              <div className="mb-3 text-sm text-gray-700 font-medium">自定义后备内容</div>
-              <div className="flex items-center gap-4">
-                <NAvatar
-                  size="lg"
-                  src="https://github.com/shadcn.png"
-                >
-                  <NAvatarImage />
-                  <NAvatarFallback>
-                    <User className="h-6 w-6" />
-                  </NAvatarFallback>
-                </NAvatar>
-                <NAvatar
-                  size="lg"
-                  src="https://invalid-url.jpg"
-                >
-                  <NAvatarImage />
-                  <NAvatarFallback>
-                    <User className="h-6 w-6 text-gray-500" />
-                  </NAvatarFallback>
-                </NAvatar>
-                <div className="text-12px text-gray-500">使用图标作为后备内容</div>
+            <div className="flex items-center gap-3 border rounded-lg p-3">
+              <NAvatar
+                fallbackLabel="AI"
+                shape="square"
+                size="md"
+                ui={{
+                  fallback: 'bg-blue-500 text-white'
+                }}
+              />
+              <div className="flex-c gap-1">
+                <div className="font-medium">AI 助手</div>
+                <div className="text-sm text-gray-500">智能对话机器人</div>
               </div>
-            </div>
-          </div>
-        </NCard.Content>
-      </NCard>
-
-      {/* 组合使用 */}
-      <NCard split>
-        <NCard.Header>
-          <NCard.TitleRoot>
-            <NCard.Title>组合使用</NCard.Title>
-          </NCard.TitleRoot>
-        </NCard.Header>
-        <NCard.Content>
-          <div className="flex flex-col gap-6">
-            {/* 用户信息展示 */}
-            <div>
-              <div className="mb-3 text-sm text-gray-700 font-medium">用户信息展示</div>
-              <div className="flex items-center gap-3 border rounded-lg bg-gray-50 p-4">
-                <NAvatar
-                  alt="John Doe"
-                  fallbackLabel="JD"
-                  size="md"
-                  src="https://github.com/shadcn.png"
-                />
-                <div>
-                  <p className="font-medium">John Doe</p>
-                  <p className="text-sm text-gray-500">john.doe@example.com</p>
-                </div>
+              <div className="ml-auto">
+                <span className="inline-block h-2 w-2 rounded-full bg-green-500" />
               </div>
             </div>
 
-            {/* 团队成员列表 */}
-            <div>
-              <div className="mb-3 text-sm text-gray-700 font-medium">团队成员列表</div>
-              <div className="flex -space-x-2">
-                <NAvatar
-                  alt="Alice"
-                  className="z-10 border-2 border-white"
-                  fallbackLabel="A"
-                  size="md"
-                  src="https://github.com/shadcn.png"
-                />
-                <NAvatar
-                  alt="Bob"
-                  className="z-9 border-2 border-white"
-                  fallbackLabel="B"
-                  size="md"
-                  ui={{
-                    fallback: 'bg-blue-100 text-blue-700'
-                  }}
-                />
-                <NAvatar
-                  alt="Charlie"
-                  className="z-8 border-2 border-white"
-                  fallbackLabel="C"
-                  size="md"
-                  ui={{
-                    fallback: 'bg-green-100 text-green-700'
-                  }}
-                />
-                <NAvatar
-                  alt="Diana"
-                  className="z-7 border-2 border-white"
-                  fallbackLabel="D"
-                  size="md"
-                  ui={{
-                    fallback: 'bg-purple-100 text-purple-700'
-                  }}
-                />
-                <NAvatar
-                  className="z-6 border-2 border-white"
-                  fallbackLabel="+5"
-                  size="md"
-                  ui={{
-                    fallback: 'bg-gray-100 text-gray-600 text-xs'
-                  }}
-                />
-              </div>
-            </div>
-
-            {/* 状态指示器 */}
-            <div>
-              <div className="mb-3 text-sm text-gray-700 font-medium">在线状态指示器</div>
-              <div className="flex items-center gap-4">
-                <div className="relative">
-                  <NAvatar
-                    alt="Online User"
-                    fallbackLabel="ON"
-                    size="lg"
-                    src="https://github.com/shadcn.png"
-                  />
-                  <div className="absolute bottom-0 right-0 h-4 w-4 border-2 border-white rounded-full bg-green-500" />
+            <div className="flex items-center gap-3 border rounded-lg p-3">
+              <NAvatar
+                alt="Sarah Wilson"
+                fallbackLabel="SW"
+                size="md"
+                src="https://i.pravatar.cc/150?img=5"
+              />
+              <div className="flex-1">
+                <div className="flex items-center justify-between">
+                  <div className="font-medium">Sarah Wilson</div>
+                  <div className="text-xs text-gray-400">2分钟前</div>
                 </div>
-                <div className="relative">
-                  <NAvatar
-                    fallbackLabel="AW"
-                    size="lg"
-                    ui={{
-                      fallback: 'bg-yellow-100 text-yellow-700'
-                    }}
-                  />
-                  <div className="absolute bottom-0 right-0 h-4 w-4 border-2 border-white rounded-full bg-yellow-500" />
-                </div>
-                <div className="relative">
-                  <NAvatar
-                    fallbackLabel="OFF"
-                    size="lg"
-                    ui={{
-                      fallback: 'bg-gray-100 text-gray-500'
-                    }}
-                  />
-                  <div className="absolute bottom-0 right-0 h-4 w-4 border-2 border-white rounded-full bg-gray-400" />
-                </div>
-              </div>
-            </div>
-          </div>
-        </NCard.Content>
-      </NCard>
-
-      {/* 高级用法 */}
-      <NCard split>
-        <NCard.Header>
-          <NCard.TitleRoot>
-            <NCard.Title>高级用法</NCard.Title>
-          </NCard.TitleRoot>
-        </NCard.Header>
-        <NCard.Content>
-          <div className="flex flex-col gap-6">
-            {/* 不同形状效果 */}
-            <div>
-              <div className="mb-3 text-sm text-gray-700 font-medium">不同形状效果</div>
-              <div className="flex items-center gap-4">
-                <NAvatar
-                  fallbackLabel="□"
-                  size="lg"
-                  ui={{
-                    root: 'rounded-lg',
-                    fallback: 'bg-blue-100 text-blue-700'
-                  }}
-                />
-                <NAvatar
-                  fallbackLabel="◇"
-                  size="lg"
-                  ui={{
-                    root: 'rounded-none rotate-45',
-                    fallback: 'bg-purple-100 text-purple-700 -rotate-45'
-                  }}
-                />
-                <NAvatar
-                  fallbackLabel="●"
-                  size="lg"
-                  ui={{
-                    fallback: 'bg-green-100 text-green-700'
-                  }}
-                />
-                <div className="text-12px text-gray-500">方形、菱形、圆形</div>
-              </div>
-            </div>
-
-            {/* 多层嵌套效果 */}
-            <div>
-              <div className="mb-3 text-sm text-gray-700 font-medium">多层嵌套效果</div>
-              <div className="flex items-center gap-4">
-                <div className="relative">
-                  <NAvatar
-                    alt="User"
-                    className="ring-4 ring-blue-100"
-                    fallbackLabel="U"
-                    size="xl"
-                    src="https://github.com/shadcn.png"
-                  />
-                  <NAvatar
-                    className="absolute border-2 border-white -bottom-1 -right-1"
-                    fallbackLabel="+"
-                    size="sm"
-                    ui={{
-                      fallback: 'bg-blue-500 text-white text-xs'
-                    }}
-                  />
-                </div>
-                <div className="relative">
-                  <NAvatar
-                    className="ring-4 ring-yellow-100"
-                    fallbackLabel="CEO"
-                    size="xl"
-                    ui={{
-                      fallback: 'bg-yellow-500 text-white font-bold text-xs'
-                    }}
-                  />
-                  <div className="absolute h-6 w-6 flex items-center justify-center border-2 border-white rounded-full bg-red-500 text-xs text-white -right-1 -top-1">
-                    9
-                  </div>
-                </div>
-                <div className="text-12px text-gray-500">添加徽章和通知</div>
+                <div className="text-sm text-gray-500">最新消息预览...</div>
               </div>
             </div>
           </div>

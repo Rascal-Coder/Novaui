@@ -14,6 +14,7 @@ export default function Avatar({
   src,
   alt,
   onLoadingStatusChange,
+  shape = 'circle',
   ...imageProps
 }: AvatarProps) {
   const imageComponentProps = useMemo(
@@ -29,6 +30,7 @@ export default function Avatar({
   return (
     <AvatarRoot
       className={className || ui?.root}
+      shape={shape}
       size={size}
     >
       {children || (

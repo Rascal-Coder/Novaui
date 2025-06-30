@@ -3,11 +3,23 @@ import { tv } from 'tailwind-variants';
 
 export const avatarVariants = tv({
   slots: {
-    root: 'relative flex shrink-0 overflow-hidden rounded-full',
-    fallback: 'flex justify-center items-center size-full rounded-full bg-muted font-medium',
+    root: 'relative flex shrink-0 overflow-hidden',
+    fallback: 'flex justify-center items-center size-full bg-muted font-medium',
     image: 'aspect-square size-full object-cover'
   },
   variants: {
+    shape: {
+      circle: {
+        root: 'rounded-full',
+        fallback: 'rounded-full',
+        image: 'rounded-full'
+      },
+      square: {
+        root: 'rounded-md',
+        fallback: 'rounded-md',
+        image: 'rounded-md'
+      }
+    },
     size: {
       xs: {
         root: 'size-6'
@@ -30,7 +42,8 @@ export const avatarVariants = tv({
     }
   },
   defaultVariants: {
-    size: 'md'
+    size: 'md',
+    shape: 'circle'
   }
 });
 
