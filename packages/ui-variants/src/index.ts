@@ -4,6 +4,7 @@ export * from './variants/card';
 export * from './variants/toast';
 export * from './variants/alert';
 export * from './variants/accordion';
+export * from './variants/avatar';
 
 export * from './shared';
 export * from './types';

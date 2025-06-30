@@ -8,3 +8,4 @@ export * from './presence';
 export * from './use-callback-ref';
 export * from './use-escape-keydown';
 export * from './id';
+export * from './use-is-hydrated';
