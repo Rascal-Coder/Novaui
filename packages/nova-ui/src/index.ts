@@ -5,4 +5,5 @@ export * from './components/sonner-toaster';
 export * from './components/toast';
 export * from './components/alert';
 export * from './components/accordion';
+export * from './components/aspect-ratio';
 export * from './types';
