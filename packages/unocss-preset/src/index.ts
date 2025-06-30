@@ -27,10 +27,54 @@ export function presetNovaui(options: PresetShadcnOptions = {}, globals = true):
     preflights: [
       {
         getCSS: () => `
-          @keyframes shadcn-down { from{ height: 0 } to { height: var(--nova-accordion-content-height)} }
-          @keyframes shadcn-up { from{ height: var(--nova-accordion-content-height)} to { height: 0 } }
-          @keyframes shadcn-collapsible-down { from{ height: 0 } to { height: var(--nova-collapsible-content-height)} }
-          @keyframes shadcn-collapsible-up { from{ height: var(--nova-collapsible-content-height)} to { height: 0 } }
+          @keyframes shadcn-down {
+            from {
+              height: 0;
+              opacity: 0;
+              transform: translateZ(0);
+            }
+            to {
+              height: var(--nova-accordion-content-height);
+              opacity: 1;
+              transform: translateZ(0);
+            }
+          }
+          @keyframes shadcn-up {
+            from {
+              height: var(--nova-accordion-content-height);
+              opacity: 1;
+              transform: translateZ(0);
+            }
+            to {
+              height: 0;
+              opacity: 0;
+              transform: translateZ(0);
+            }
+          }
+          @keyframes shadcn-collapsible-down {
+            from {
+              height: 0;
+              opacity: 0;
+              transform: translateZ(0);
+            }
+            to {
+              height: var(--nova-collapsible-content-height);
+              opacity: 1;
+              transform: translateZ(0);
+            }
+          }
+          @keyframes shadcn-collapsible-up {
+            from {
+              height: var(--nova-collapsible-content-height);
+              opacity: 1;
+              transform: translateZ(0);
+            }
+            to {
+              height: 0;
+              opacity: 0;
+              transform: translateZ(0);
+            }
+          }
 
           ${generateCSSVars(options)}
 
@@ -64,25 +108,25 @@ export function presetNovaui(options: PresetShadcnOptions = {}, globals = true):
       [
         'animate-accordion-down',
         {
-          animation: 'shadcn-down 0.2s ease-out'
+          animation: 'shadcn-down 0.25s cubic-bezier(0.22, 1, 0.36, 1)'
         }
       ],
       [
         'animate-accordion-up',
         {
-          animation: 'shadcn-up 0.2s ease-out'
+          animation: 'shadcn-up 0.25s cubic-bezier(0.22, 1, 0.36, 1)'
         }
       ],
       [
         'animate-collapsible-down',
         {
-          animation: 'shadcn-collapsible-down 0.2s ease-out'
+          animation: 'shadcn-collapsible-down 0.25s cubic-bezier(0.22, 1, 0.36, 1)'
         }
       ],
       [
         'animate-collapsible-up',
         {
-          animation: 'shadcn-collapsible-up 0.2s ease-out'
+          animation: 'shadcn-collapsible-up 0.25s cubic-bezier(0.22, 1, 0.36, 1)'
         }
       ]
     ],
@@ -100,7 +144,12 @@ export function presetNovaui(options: PresetShadcnOptions = {}, globals = true):
         'i-flex-c': 'inline-flex flex-col',
         'i-flex-c-center': 'i-flex-center flex-col',
         'i-flex-c-stretch': 'i-flex-c items-stretch',
-        'flex-1-hidden': 'flex-1 overflow-hidden'
+        'flex-1-hidden': 'flex-1 overflow-hidden',
+        'animate-smooth': 'will-change-transform backface-visibility-hidden perspective-1000',
+        'animate-gpu': 'transform-gpu',
+        'transition-smooth': 'transition-all duration-300 cubic-bezier(0.4, 0, 0.2, 1)',
+        'transition-fast': 'transition-all duration-200 cubic-bezier(0.4, 0, 0.2, 1)',
+        'transition-slow': 'transition-all duration-500 cubic-bezier(0.4, 0, 0.2, 1)'
       }
     ],
     theme: {

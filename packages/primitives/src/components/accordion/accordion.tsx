@@ -102,7 +102,7 @@ const AccordionImplSingle = React.forwardRef<AccordionImplSingleElement, Accordi
       value: valueProp,
       defaultValue,
       onValueChange = () => {},
-      collapsible = false,
+      collapsible = true,
       ...accordionSingleProps
     } = props;
 
@@ -487,8 +487,8 @@ const AccordionContent = React.forwardRef<AccordionContentElement, AccordionCont
         {...contentProps}
         ref={forwardedRef}
         style={{
-          ['--radix-accordion-content-height' as any]: 'var(--radix-collapsible-content-height)',
-          ['--radix-accordion-content-width' as any]: 'var(--radix-collapsible-content-width)',
+          ['--nova-accordion-content-height' as any]: 'var(--nova-collapsible-content-height)',
+          ['--nova-accordion-content-width' as any]: 'var(--nova-collapsible-content-width)',
           ...props.style
         }}
       />
@@ -511,6 +511,7 @@ const Trigger = AccordionTrigger;
 const Content = AccordionContent;
 
 export {
+  // eslint-disable-next-line react-refresh/only-export-components
   createAccordionScope,
   //
   Accordion,

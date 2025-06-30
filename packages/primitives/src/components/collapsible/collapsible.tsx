@@ -190,8 +190,8 @@ const CollapsibleContentImpl = React.forwardRef<CollapsibleContentImplElement, C
         ref={composedRefs}
         style={{
           // 设置CSS自定义属性，供外部CSS动画使用
-          [`--radix-collapsible-content-height` as any]: height ? `${height}px` : undefined,
-          [`--radix-collapsible-content-width` as any]: width ? `${width}px` : undefined,
+          [`--nova-collapsible-content-height` as any]: height ? `${height}px` : undefined,
+          [`--nova-collapsible-content-width` as any]: width ? `${width}px` : undefined,
           ...props.style
         }}
       >

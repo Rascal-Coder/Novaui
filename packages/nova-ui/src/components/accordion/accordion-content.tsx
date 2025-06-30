@@ -1,22 +1,26 @@
+import type { AccordionContentProps as PrimitiveAccordionContentProps } from '@novaui/primitives';
 import { AccordionContent as AccordionContentPrimitive } from '@novaui/primitives';
 import { accordionVariants, cn } from '@novaui/variants';
 import { useMemo } from 'react';
 
-import type { AccordionContentProps } from './types';
+export interface AccordionContentProps extends PrimitiveAccordionContentProps {
+  /** The size of the accordion content. */
+  size?: import('@novaui/variants').ThemeSize;
+}
 
-export default function AccordionContent({ size, className, content, children, ...props }: AccordionContentProps) {
+export default function AccordionContent({ size, className, children, ...props }: AccordionContentProps) {
   const mergedCls = useMemo(() => {
     const { content: contentVariant } = accordionVariants({ size });
-
     return cn(contentVariant(), className);
   }, [className, size]);
 
   return (
     <AccordionContentPrimitive
+      data-slot="accordion-content"
       {...props}
       className={mergedCls}
     >
-      {children || content}
+      {children}
     </AccordionContentPrimitive>
   );
 }

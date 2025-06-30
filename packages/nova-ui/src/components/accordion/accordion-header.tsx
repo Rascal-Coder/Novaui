@@ -1,18 +1,24 @@
+import type { AccordionHeaderProps as PrimitiveAccordionHeaderProps } from '@novaui/primitives';
 import { AccordionHeader as AccordionHeaderPrimitive } from '@novaui/primitives';
 import { accordionVariants, cn } from '@novaui/variants';
 import { useMemo } from 'react';
 
-import type { AccordionHeaderProps } from './types';
+export interface AccordionHeaderProps extends PrimitiveAccordionHeaderProps {
+  /** The size of the accordion header. */
+  size?: import('@novaui/variants').ThemeSize;
+}
 
 export default function AccordionHeader(props: AccordionHeaderProps) {
-  const { className, children, ...delegatedProps } = props;
+  const { className, size, children, ...delegatedProps } = props;
 
   const mergedCls = useMemo(() => {
-    return cn(accordionVariants(), className);
-  }, [className]);
+    const { header } = accordionVariants({ size });
+    return cn(header(), className);
+  }, [className, size]);
 
   return (
     <AccordionHeaderPrimitive
+      data-slot="accordion-header"
       {...delegatedProps}
       className={mergedCls}
     >

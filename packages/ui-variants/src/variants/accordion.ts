@@ -4,16 +4,20 @@ import { tv } from 'tailwind-variants';
 export const accordionVariants = tv({
   slots: {
     root: '',
-    item: 'border-b',
+    item: 'border-b last:border-b-0',
     header: 'flex',
-    content: [`overflow-hidden data-[state=open]:animate-accordion-down data-[state=closed]:animate-accordion-up`],
+    content: [
+      'overflow-hidden will-change-transform transform-gpu',
+      'data-[state=open]:animate-accordion-down data-[state=closed]:animate-accordion-up'
+    ],
     trigger: [
-      `flex-1 flex items-center justify-start font-medium transition-all-200 bg-transparent`,
+      `flex-1 flex items-center justify-start font-medium transition-all duration-200 cubic-bezier(0.22, 1, 0.36, 1) bg-transparent`,
       `focus-visible:(outline-none ring-2 ring-offset-2 ring-offset-background ring-primary)`,
-      `hover:underline [&[data-state=open]>.trigger-icon]:rotate-180`
+      `hover:underline [&[data-state=open]>.trigger-icon]:rotate-180`,
+      `disabled:(opacity-50 cursor-not-allowed hover:no-underline)`
     ],
     triggerLeadingIcon: `shrink-0`,
-    triggerIcon: `trigger-icon ml-auto shrink-0 text-muted-foreground transition-transform-200`
+    triggerIcon: `trigger-icon ml-auto shrink-0 text-muted-foreground transition-transform duration-200 cubic-bezier(0.22, 1, 0.36, 1)`
   },
   variants: {
     size: {
