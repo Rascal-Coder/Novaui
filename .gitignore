@@ -35,3 +35,7 @@ yarn.lock
 
 .VSCodeCounter
 **/.vitepress/cache
+
+
+.next
+.source

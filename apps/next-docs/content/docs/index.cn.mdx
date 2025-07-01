@@ -1,0 +1,53 @@
+---
+title: 介绍
+description: NovaUI 组件库介绍与快速入门指南
+---
+
+## 欢迎使用 NovaUI
+
+NovaUI 是一个现代化的 React 组件库，专注于无障碍性和开发者体验。它提供了一套全面的可定制组件，帮助您构建美观且功能强大的用户界面。
+
+## 特性
+
+- **无障碍优先**: 所有组件都遵循 ARIA 规范，支持键盘导航
+- **完全可定制**: 灵活的主题系统，支持自定义变体
+- **TypeScript 就绪**: 完整的 TypeScript 支持，提供正确的类型定义
+- **现代技术栈**: 基于 React 18+ 和现代开发实践构建
+- **可摇树优化**: 按需导入，保持包体积最小
+
+## 快速开始
+
+使用您喜欢的包管理器安装 NovaUI：
+
+```bash
+npm install novaui
+# 或者
+pnpm add novaui
+# 或者
+yarn add novaui
+```
+
+### 基本使用
+
+以下是如何使用 NovaUI 组件的简单示例：
+
+```tsx
+import { Button, Card } from 'novaui'
+
+function App() {
+  return (
+    <Card>
+      <Card.Header>
+        <Card.Title>欢迎使用 NovaUI</Card.Title>
+      </Card.Header>
+      <Card.Content>
+        <p>使用我们的组件库构建令人惊叹的用户界面。</p>
+        <Button variant="primary">开始使用</Button>
+      </Card.Content>
+    </Card>
+  )
+}
+```
+
+
+快乐编码！🚀
