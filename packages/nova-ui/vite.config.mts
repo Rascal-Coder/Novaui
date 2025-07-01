@@ -5,8 +5,6 @@ import fg from 'fast-glob';
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
 
-// import pkg from './package.json';
-
 export default defineConfig(() => {
   const components = fg.sync('src/components/**/index.ts');
   const names = components.map(component => {
