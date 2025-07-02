@@ -1,4 +1,21 @@
-import { NButton, NCard, toast } from 'nova-ui';
+import { Check } from 'lucide-react';
+import { type ActionButtonProps, NButton, NCard, toast } from 'nova-ui';
+
+// 自定义 ActionButton 组件，带有图标
+const CustomActionButton = ({ action, deleteToast }: ActionButtonProps) => {
+  return (
+    <button
+      className="inline-flex items-center justify-center rounded-md bg-blue-600 px-3 py-1.5 text-sm text-white font-medium transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+      onClick={event => {
+        action.onClick(event);
+        if (!event.defaultPrevented) deleteToast();
+      }}
+    >
+      <Check className="mr-1 h-4 w-4" />
+      {action.label}
+    </button>
+  );
+};
 
 export default function SonnerToasterExample() {
   function openDefaultToast() {
@@ -67,6 +84,20 @@ export default function SonnerToasterExample() {
         }
       },
       closeButton: true
+    });
+  }
+
+  function openCustomActionToast() {
+    toast('Event has been created', {
+      action: {
+        label: 'Custom Confirm',
+        onClick: () => {
+          // eslint-disable-next-line no-alert
+          window.alert('Custom action clicked!');
+        }
+      },
+      closeButton: true,
+      customActionButton: CustomActionButton
     });
   }
 
@@ -243,12 +274,20 @@ export default function SonnerToasterExample() {
               </NCard.TitleRoot>
             </NCard.Header>
             <NCard.Content>
-              <NButton
-                variant="outline"
-                onClick={openToastWithAction}
-              >
-                Show Toast with Actions
-              </NButton>
+              <div className="flex gap-3">
+                <NButton
+                  variant="outline"
+                  onClick={openToastWithAction}
+                >
+                  Show Toast with Actions
+                </NButton>
+                <NButton
+                  variant="outline"
+                  onClick={openCustomActionToast}
+                >
+                  Show Custom Action (with Icon)
+                </NButton>
+              </div>
             </NCard.Content>
           </NCard>
         </NCard.Content>

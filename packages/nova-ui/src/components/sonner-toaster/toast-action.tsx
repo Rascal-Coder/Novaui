@@ -3,18 +3,15 @@ import type { ReactNode } from 'react';
 
 import { NButton, NButtonIcon } from '../button';
 
-import type { SonnerToastAction, SonnerToastT } from './types';
+import type { ActionButtonProps, CloseButtonProps, SonnerToastT, ToastOptions } from './types';
 
-interface ActionButtonProps {
-  action: SonnerToastAction;
-  deleteToast: () => void;
-}
-const ActionButton = ({ action, deleteToast }: ActionButtonProps) => {
+// 默认的 ActionButton 组件
+const DefaultActionButton = ({ action, deleteToast }: ActionButtonProps) => {
   return (
     <NButton
-      color="primary"
+      color="accent"
       size="sm"
-      variant="outline"
+      variant="solid"
       onClick={event => {
         action?.onClick(event);
         if (event.defaultPrevented) return;
@@ -26,15 +23,8 @@ const ActionButton = ({ action, deleteToast }: ActionButtonProps) => {
   );
 };
 
-const CloseButton = ({
-  closeButtonAriaLabel,
-  deleteToast,
-  closeIcon
-}: {
-  deleteToast: () => void;
-  closeIcon: ReactNode;
-  closeButtonAriaLabel?: string;
-}) => {
+// 默认的 CloseButton 组件
+const DefaultCloseButton = ({ closeButtonAriaLabel, deleteToast, closeIcon }: CloseButtonProps) => {
   return (
     <NButtonIcon
       aria-label={closeButtonAriaLabel}
@@ -55,17 +45,24 @@ interface AlertActionProps {
   deleteToast: () => void;
   closeIcon: ReactNode;
   closeButtonAriaLabel?: string;
+  toastDefaults?: ToastOptions;
 }
 
-const AlertAction = ({ toast, deleteToast, closeIcon, closeButtonAriaLabel }: AlertActionProps) => {
+const AlertAction = ({ toast, deleteToast, closeIcon, closeButtonAriaLabel, toastDefaults }: AlertActionProps) => {
+  // 获取自定义组件或使用默认组件 (优先使用 toast 上的，然后是 toastDefaults)
+  const ActionButtonComponent =
+    (toast as any).customActionButton || toastDefaults?.customActionButton || DefaultActionButton;
+  const CloseButtonComponent =
+    (toast as any).customCloseButton || toastDefaults?.customCloseButton || DefaultCloseButton;
+
   if (toast.action && toast.closeButton) {
     return (
       <div className="flex items-center gap-2">
-        <ActionButton
+        <ActionButtonComponent
           action={toast.action}
           deleteToast={deleteToast}
         />
-        <CloseButton
+        <CloseButtonComponent
           closeButtonAriaLabel={closeButtonAriaLabel}
           closeIcon={closeIcon}
           deleteToast={deleteToast}
@@ -74,14 +71,14 @@ const AlertAction = ({ toast, deleteToast, closeIcon, closeButtonAriaLabel }: Al
     );
   } else if (toast.action) {
     return (
-      <ActionButton
+      <ActionButtonComponent
         action={toast.action}
         deleteToast={deleteToast}
       />
     );
   } else if (toast.closeButton) {
     return (
-      <CloseButton
+      <CloseButtonComponent
         closeButtonAriaLabel={closeButtonAriaLabel}
         closeIcon={closeIcon}
         deleteToast={deleteToast}

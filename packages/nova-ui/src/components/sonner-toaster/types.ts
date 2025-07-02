@@ -76,6 +76,8 @@ export type ToastOptions = {
   duration?: number;
   closeButton?: boolean;
   closeIcon?: ReactNode;
+  customActionButton?: React.ComponentType<ActionButtonProps>;
+  customCloseButton?: React.ComponentType<CloseButtonProps>;
 };
 
 export enum SwipeStateTypes {
@@ -91,4 +93,17 @@ export interface ToastToDismiss {
 
 export type ExternalToast = Omit<SonnerToastT, 'id' | 'type' | 'title' | 'delete' | 'promise'> & {
   id?: number | string;
+  customActionButton?: React.ComponentType<ActionButtonProps>;
+  customCloseButton?: React.ComponentType<CloseButtonProps>;
 };
+
+export interface ActionButtonProps {
+  action: SonnerToastAction;
+  deleteToast: () => void;
+}
+
+export interface CloseButtonProps {
+  closeButtonAriaLabel?: string;
+  deleteToast: () => void;
+  closeIcon: ReactNode;
+}

@@ -130,3 +130,94 @@ function MyComponent() {
   --nova-sonner-toast-gap: 8px;
 }
 ```
+
+## 自定义 ActionButton 和 CloseButton
+
+你可以通过 `toastDefaults` 选项传入自定义的 `ActionButton` 和 `CloseButton` 组件。
+
+### 使用示例
+
+```tsx
+import { toast } from 'your-toast-library';
+import { CustomActionButton, CustomCloseButton } from './custom-components';
+
+// 配置自定义组件
+const toastDefaults = {
+  customActionButton: CustomActionButton,
+  customCloseButton: CustomCloseButton,
+  closeIcon: <YourCustomIcon />,
+  duration: 5000,
+  closeButton: true
+};
+
+// 使用自定义配置
+toast('消息内容', {
+  action: {
+    label: '确认',
+    onClick: () => console.log('点击了确认按钮')
+  },
+  closeButton: true
+}, toastDefaults);
+```
+
+### 自定义 ActionButton 组件
+
+```tsx
+import type { ActionButtonProps } from './types';
+
+const CustomActionButton = ({ action, deleteToast }: ActionButtonProps) => {
+  return (
+    <button
+      className="custom-action-button"
+      onClick={(event) => {
+        action.onClick(event);
+        if (!event.defaultPrevented) {
+          deleteToast();
+        }
+      }}
+    >
+      {action.label}
+    </button>
+  );
+};
+```
+
+### 自定义 CloseButton 组件
+
+```tsx
+import type { CloseButtonProps } from './types';
+
+const CustomCloseButton = ({ closeButtonAriaLabel, deleteToast, closeIcon }: CloseButtonProps) => {
+  return (
+    <button
+      aria-label={closeButtonAriaLabel}
+      className="custom-close-button"
+      onClick={deleteToast}
+    >
+      {closeIcon || <span>×</span>}
+    </button>
+  );
+};
+```
+
+### 类型定义
+
+```tsx
+interface ActionButtonProps {
+  action: SonnerToastAction;
+  deleteToast: () => void;
+}
+
+interface CloseButtonProps {
+  closeButtonAriaLabel?: string;
+  deleteToast: () => void;
+  closeIcon: ReactNode;
+}
+```
+
+### 注意事项
+
+1. 自定义组件必须接受相应的 props 参数
+2. 在 `ActionButton` 中，确保在调用 `action.onClick` 后检查 `event.defaultPrevented`
+3. 在 `CloseButton` 中，确保调用 `deleteToast` 来关闭 toast
+4. 如果不提供自定义组件，将使用默认的组件实现

@@ -35,7 +35,6 @@ export const SonnerToaster = ({
 }: ToasterProps) => {
   const [toasts, setToasts] = useState<SonnerToastT[]>([]);
 
-  // Changed
   const possiblePositions = useMemo(() => {
     return Array.from(
       new Set(

@@ -72,6 +72,7 @@ export const Toast = ({
   const lastCloseTimerStartTimeRef = useRef(0);
   const pointerStartRef = useRef<{ x: number; y: number } | null>(null);
   const [y, x] = position.split('-');
+
   const toastsHeightBefore = useMemo(() => {
     return heights.reduce((prev, curr, reducerIndex) => {
       // Calculate offset up until current  toast
@@ -118,7 +119,7 @@ export const Toast = ({
       // 清理函数
       return () => setHeights(h => h.filter(item => item.toastId !== toast.id));
     }
-  }, [mounted, toast.title, toast.description, setHeights, toast.id]);
+  }, [mounted, toast.title, toast.description, setHeights, toast.id, toast.position]);
 
   const deleteToast = useCallback(() => {
     // Save the offset for the exit swipe animation
@@ -311,6 +312,7 @@ export const Toast = ({
           closeIcon={toastDefaults?.closeIcon}
           deleteToast={deleteToast}
           toast={toast}
+          toastDefaults={toastDefaults}
         />
       </Alert.Root>
     </li>

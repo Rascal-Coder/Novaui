@@ -1,9 +1,9 @@
-import type { SxProps, Theme } from '@mui/material';
+// import type { SxProps, Theme } from '@mui/material';
 
-export const formatSx = (sx: SxProps<Theme> | undefined) => {
-  if (!sx) return [];
-  return [...(Array.isArray(sx) ? sx : [sx])];
-};
+// export const formatSx = (sx: SxProps<Theme> | undefined) => {
+//   if (!sx) return [];
+//   return [...(Array.isArray(sx) ? sx : [sx])];
+// };
 
 export function pick<T extends Record<string, any>, K extends keyof T>(obj: T, keys: K[]): Pick<T, K> {
   const result = {} as Pick<T, K>;
