@@ -7,4 +7,5 @@ export * from './components/alert';
 export * from './components/accordion';
 export * from './components/aspect-ratio';
 export * from './components/avatar';
+export * from './components/code-block';
 export * from './types';

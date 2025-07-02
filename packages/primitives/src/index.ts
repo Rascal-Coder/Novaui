@@ -12,6 +12,7 @@ export * from './components/visually-hidden';
 export * from './components/avatar';
 export * from './components/alert-dialog';
 export * from './components/dialog';
+export * from './components/select';
 
 export * from './context';
 export * from './shared';
