@@ -1,30 +1,32 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { clamp } from '@radix-ui/number';
-import { composeEventHandlers } from '@radix-ui/primitive';
-import { createCollection } from '@radix-ui/react-collection';
-import { useComposedRefs } from '@radix-ui/react-compose-refs';
-import { createContextScope } from '@radix-ui/react-context';
-import type { Scope } from '@radix-ui/react-context';
-import { useDirection } from '@radix-ui/react-direction';
-import { DismissableLayer } from '@radix-ui/react-dismissable-layer';
-import { useFocusGuards } from '@radix-ui/react-focus-guards';
-import { FocusScope } from '@radix-ui/react-focus-scope';
-import { useId } from '@radix-ui/react-id';
-import * as PopperPrimitive from '@radix-ui/react-popper';
-import { createPopperScope } from '@radix-ui/react-popper';
-import { Portal as PortalPrimitive } from '@radix-ui/react-portal';
-import { Primitive } from '@radix-ui/react-primitive';
-import { createSlot } from '@radix-ui/react-slot';
-import { useCallbackRef } from '@radix-ui/react-use-callback-ref';
-import { useControllableState } from '@radix-ui/react-use-controllable-state';
-import { useLayoutEffect } from '@radix-ui/react-use-layout-effect';
-import { usePrevious } from '@radix-ui/react-use-previous';
-import { VISUALLY_HIDDEN_STYLES } from '@radix-ui/react-visually-hidden';
 import { hideOthers } from 'aria-hidden';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { RemoveScroll } from 'react-remove-scroll';
+
+import type { Scope } from '../../context';
+import { createContextScope } from '../../context';
+import {
+  FocusScope,
+  clamp,
+  composeEventHandlers,
+  createCollection,
+  useCallbackRef,
+  useControllableState,
+  useFocusGuards,
+  useId,
+  useLayoutEffect,
+  usePrevious
+} from '../../shared';
+import { useComposedRefs } from '../compose-refs';
+import { useDirection } from '../direction';
+import { DismissableLayer } from '../dismissable-layer';
+import { createPopperScope } from '../popper';
+import * as PopperPrimitive from '../popper';
+import { Portal as PortalPrimitive } from '../portal';
+import { Primitive } from '../primitive';
+import { createSlot } from '../slot';
+import { VISUALLY_HIDDEN_STYLES } from '../visually-hidden';
 
 type Direction = 'ltr' | 'rtl';
 
@@ -76,32 +78,6 @@ type SelectNativeOptionsContextValue = {
 const [SelectNativeOptionsProvider, useSelectNativeOptionsContext] =
   createSelectContext<SelectNativeOptionsContextValue>(SELECT_NAME);
 
-// interface ControlledClearableSelectProps {
-//     value: string | undefined;
-//     defaultValue?: never;
-//     onValueChange: (value: string | undefined) => void;
-// }
-
-// interface ControlledUnclearableSelectProps {
-//     value: string;
-//     defaultValue?: never;
-//     onValueChange: (value: string) => void;
-// }
-
-// interface UncontrolledSelectProps {
-//     value?: never;
-//     defaultValue?: string;
-//     onValueChange?: {
-//         (value: string): void;
-//         (value: string | undefined): void;
-//     };
-// }
-
-// type SelectControlProps =
-//     | ControlledClearableSelectProps
-//     | ControlledUnclearableSelectProps
-//     | UncontrolledSelectProps;
-
 interface SelectSharedProps {
   children?: React.ReactNode;
   open?: boolean;
@@ -114,12 +90,6 @@ interface SelectSharedProps {
   required?: boolean;
   form?: string;
 }
-
-// eslint-disable-next-line no-warning-comments
-// TODO: Should improve typing somewhat, but this would be a breaking change.
-// Consider using in the next major version (along with some testing to be sure
-// it works as expected and doesn't cause problems)
-// type _FutureSelectProps = SelectSharedProps & SelectControlProps;
 
 type SelectProps = SelectSharedProps & {
   value?: string;
@@ -152,14 +122,12 @@ const Select: React.FC<SelectProps> = (props: ScopedProps<SelectProps>) => {
   const [open, setOpen] = useControllableState({
     prop: openProp,
     defaultProp: defaultOpen ?? false,
-    onChange: onOpenChange,
-    caller: SELECT_NAME
+    onChange: onOpenChange
   });
   const [value, setValue] = useControllableState({
     prop: valueProp,
     defaultProp: defaultValue,
-    onChange: onValueChange as any,
-    caller: SELECT_NAME
+    onChange: onValueChange as any
   });
   const triggerPointerDownPosRef = React.useRef<{ x: number; y: number } | null>(null);
 
@@ -177,7 +145,7 @@ const Select: React.FC<SelectProps> = (props: ScopedProps<SelectProps>) => {
     .join(';');
 
   return (
-    <PopperPrimitive.Root {...popperScope}>
+    <PopperPrimitive.PopperRoot {...popperScope}>
       <SelectProvider
         contentId={useId()}
         dir={direction}
@@ -233,7 +201,7 @@ const Select: React.FC<SelectProps> = (props: ScopedProps<SelectProps>) => {
           </SelectBubbleInput>
         ) : null}
       </SelectProvider>
-    </PopperPrimitive.Root>
+    </PopperPrimitive.PopperRoot>
   );
 };
 
@@ -284,7 +252,7 @@ const SelectTrigger = React.forwardRef<SelectTriggerElement, SelectTriggerProps>
     };
 
     return (
-      <PopperPrimitive.Anchor
+      <PopperPrimitive.PopperPrimitiveAnchor
         asChild
         {...popperScope}
       >
@@ -301,6 +269,21 @@ const SelectTrigger = React.forwardRef<SelectTriggerElement, SelectTriggerProps>
           role="combobox"
           type="button"
           {...triggerProps}
+          // Enable compatibility with native label or custom `Label` "click" for Safari:
+          ref={composedRefs}
+          onClick={composeEventHandlers(triggerProps.onClick, event => {
+            // Whilst browsers generally have no issue focusing the trigger when clicking
+            // on a label, Safari seems to struggle with the fact that there's no `onClick`.
+            // We force `focus` in this case. Note: this doesn't create any other side-effect
+            // because we are preventing default in `onPointerDown` so effectively
+            // this only runs for a label "click"
+            event.currentTarget.focus();
+
+            // Open on click when using a touch or pen device
+            if (pointerTypeRef.current !== 'mouse') {
+              handleOpen(event);
+            }
+          })}
           onKeyDown={composeEventHandlers(triggerProps.onKeyDown, event => {
             const isTypingAhead = searchRef.current !== '';
             const isModifierKey = event.ctrlKey || event.altKey || event.metaKey;
@@ -330,23 +313,8 @@ const SelectTrigger = React.forwardRef<SelectTriggerElement, SelectTriggerProps>
               event.preventDefault();
             }
           })}
-          ref={composedRefs}
-          // Enable compatibility with native label or custom `Label` "click" for Safari:
-          onClick={composeEventHandlers(triggerProps.onClick, event => {
-            // Whilst browsers generally have no issue focusing the trigger when clicking
-            // on a label, Safari seems to struggle with the fact that there's no `onClick`.
-            // We force `focus` in this case. Note: this doesn't create any other side-effect
-            // because we are preventing default in `onPointerDown` so effectively
-            // this only runs for a label "click"
-            event.currentTarget.focus();
-
-            // Open on click when using a touch or pen device
-            if (pointerTypeRef.current !== 'mouse') {
-              handleOpen(event);
-            }
-          })}
         />
-      </PopperPrimitive.Anchor>
+      </PopperPrimitive.PopperPrimitiveAnchor>
     );
   }
 );
@@ -368,7 +336,7 @@ interface SelectValueProps extends Omit<PrimitiveSpanProps, 'placeholder'> {
 const SelectValue = React.forwardRef<SelectValueElement, SelectValueProps>(
   (props: ScopedProps<SelectValueProps>, forwardedRef) => {
     // We ignore `className` and `style` as this part shouldn't be styled.
-    const { __scopeSelect, className, style, children, placeholder = '', ...valueProps } = props;
+    const { __scopeSelect, className: _className, style: _style, children, placeholder = '', ...valueProps } = props;
     const context = useSelectContext(VALUE_NAME, __scopeSelect);
     const { onValueNodeHasChildrenChange } = context;
     const hasChildren = children !== undefined;
@@ -386,7 +354,7 @@ const SelectValue = React.forwardRef<SelectValueElement, SelectValueProps>(
         // through the item they came from
         style={{ pointerEvents: 'none' }}
       >
-        {shouldShowPlaceholder(context.value) ? <>{placeholder}</> : children}
+        {shouldShowPlaceholder(context.value) ? placeholder : children}
       </Primitive.span>
     );
   }
@@ -749,11 +717,11 @@ const SelectContentImpl = React.forwardRef<SelectContentImplElement, SelectConte
               asChild
               disableOutsidePointerEvents
               onDismiss={() => context.onOpenChange(false)}
+              onEscapeKeyDown={onEscapeKeyDown}
+              onFocusOutside={event => event.preventDefault()}
               onPointerDownOutside={onPointerDownOutside}
               // When focus is trapped, a focusout event may still happen.
               // We make sure we don't trigger our `onDismiss` in such case.
-              onEscapeKeyDown={onEscapeKeyDown}
-              onFocusOutside={event => event.preventDefault()}
             >
               <SelectPosition
                 data-state={context.open ? 'open' : 'closed'}
@@ -1035,8 +1003,8 @@ SelectItemAlignedPosition.displayName = ITEM_ALIGNED_POSITION_NAME;
 
 const POPPER_POSITION_NAME = 'SelectPopperPosition';
 
-type SelectPopperPositionElement = React.ComponentRef<typeof PopperPrimitive.Content>;
-type PopperContentProps = React.ComponentPropsWithoutRef<typeof PopperPrimitive.Content>;
+type SelectPopperPositionElement = React.ComponentRef<typeof PopperPrimitive.PopperPrimitiveContent>;
+type PopperContentProps = React.ComponentPropsWithoutRef<typeof PopperPrimitive.PopperPrimitiveContent>;
 interface SelectPopperPositionProps extends PopperContentProps, SelectPopperPrivateProps {}
 
 const SelectPopperPosition = React.forwardRef<SelectPopperPositionElement, SelectPopperPositionProps>(
@@ -1045,7 +1013,7 @@ const SelectPopperPosition = React.forwardRef<SelectPopperPositionElement, Selec
     const popperScope = usePopperScope(__scopeSelect);
 
     return (
-      <PopperPrimitive.Content
+      <PopperPrimitive.PopperPrimitiveContent
         {...popperScope}
         {...popperProps}
         align={align}
@@ -1057,11 +1025,11 @@ const SelectPopperPosition = React.forwardRef<SelectPopperPositionElement, Selec
           ...popperProps.style,
           // re-namespace exposed content custom properties
           ...{
-            '--radix-select-content-transform-origin': 'var(--radix-popper-transform-origin)',
-            '--radix-select-content-available-width': 'var(--radix-popper-available-width)',
-            '--radix-select-content-available-height': 'var(--radix-popper-available-height)',
-            '--radix-select-trigger-width': 'var(--radix-popper-anchor-width)',
-            '--radix-select-trigger-height': 'var(--radix-popper-anchor-height)'
+            '--novaui-select-content-transform-origin': 'var(--novaui-popper-transform-origin)',
+            '--novaui-select-content-available-width': 'var(--novaui-popper-available-width)',
+            '--novaui-select-content-available-height': 'var(--novaui-popper-available-height)',
+            '--novaui-select-trigger-width': 'var(--novaui-popper-anchor-width)',
+            '--novaui-select-trigger-height': 'var(--novaui-popper-anchor-height)'
           }
         }}
       />
@@ -1107,12 +1075,12 @@ const SelectViewport = React.forwardRef<SelectViewportElement, SelectViewportPro
         <style
           nonce={nonce}
           dangerouslySetInnerHTML={{
-            __html: `[data-radix-select-viewport]{scrollbar-width:none;-ms-overflow-style:none;-webkit-overflow-scrolling:touch;}[data-radix-select-viewport]::-webkit-scrollbar{display:none}`
+            __html: `[data-novaui-select-viewport]{scrollbar-width:none;-ms-overflow-style:none;-webkit-overflow-scrolling:touch;}[data-novaui-select-viewport]::-webkit-scrollbar{display:none}`
           }}
         />
         <Collection.Slot scope={__scopeSelect}>
           <Primitive.div
-            data-radix-select-viewport=""
+            data-novaui-select-viewport=""
             role="presentation"
             {...viewportProps}
             ref={composedRefs}
@@ -1360,7 +1328,7 @@ interface SelectItemTextProps extends PrimitiveSpanProps {}
 const SelectItemText = React.forwardRef<SelectItemTextElement, SelectItemTextProps>(
   (props: ScopedProps<SelectItemTextProps>, forwardedRef) => {
     // We ignore `className` and `style` as this part shouldn't be styled.
-    const { __scopeSelect, className, style, ...itemTextProps } = props;
+    const { __scopeSelect, className: _className, style: _style, ...itemTextProps } = props;
     const context = useSelectContext(ITEM_TEXT_NAME, __scopeSelect);
     const contentContext = useSelectContentContext(ITEM_TEXT_NAME, __scopeSelect);
     const itemContext = useSelectItemContext(ITEM_TEXT_NAME, __scopeSelect);
@@ -1457,8 +1425,8 @@ const SelectScrollUpButton = React.forwardRef<SelectScrollUpButtonElement, Selec
       if (contentContext.viewport && contentContext.isPositioned) {
         const viewport = contentContext.viewport;
         function handleScroll() {
-          const __canScrollUp = viewport.scrollTop > 0;
-          setCanScrollUp(__canScrollUp);
+          const isScrollable = viewport.scrollTop > 0;
+          setCanScrollUp(isScrollable);
         }
         handleScroll();
         viewport.addEventListener('scroll', handleScroll);
@@ -1506,8 +1474,8 @@ const SelectScrollDownButton = React.forwardRef<SelectScrollDownButtonElement, S
           const maxScroll = viewport.scrollHeight - viewport.clientHeight;
           // we use Math.ceil here because if the UI is zoomed-in
           // `scrollTop` is not always reported as an integer
-          const __canScrollDown = Math.ceil(viewport.scrollTop) < maxScroll;
-          setCanScrollDown(__canScrollDown);
+          const isScrollable = Math.ceil(viewport.scrollTop) < maxScroll;
+          setCanScrollDown(isScrollable);
         }
         handleScroll();
         viewport.addEventListener('scroll', handleScroll);
@@ -1537,8 +1505,7 @@ interface SelectScrollButtonImplProps extends PrimitiveDivProps {
   onAutoScroll(): void;
 }
 
-const SELECT_SCROLL_BUTTON_IMPL = 'SELECT_SCROLL_BUTTON_IMPL';
-
+const SELECT_SCROLL_BUTTON_NAME = 'SelectScrollButtonImpl';
 const SelectScrollButtonImpl = React.forwardRef<SelectScrollButtonImplElement, SelectScrollButtonImplProps>(
   (props: ScopedProps<SelectScrollButtonImplProps>, forwardedRef) => {
     const { __scopeSelect, onAutoScroll, ...scrollIndicatorProps } = props;
@@ -1590,7 +1557,9 @@ const SelectScrollButtonImpl = React.forwardRef<SelectScrollButtonImplElement, S
     );
   }
 );
-SelectScrollButtonImpl.displayName = SELECT_SCROLL_BUTTON_IMPL;
+
+SelectScrollButtonImpl.displayName = SELECT_SCROLL_BUTTON_NAME;
+
 /* -------------------------------------------------------------------------------------------------
  * SelectSeparator
  * ----------------------------------------------------------------------------------------------- */
@@ -1621,8 +1590,8 @@ SelectSeparator.displayName = SEPARATOR_NAME;
 
 const ARROW_NAME = 'SelectArrow';
 
-type SelectArrowElement = React.ComponentRef<typeof PopperPrimitive.Arrow>;
-type PopperArrowProps = React.ComponentPropsWithoutRef<typeof PopperPrimitive.Arrow>;
+type SelectArrowElement = React.ComponentRef<typeof PopperPrimitive.PopperPrimitiveArrow>;
+type PopperArrowProps = React.ComponentPropsWithoutRef<typeof PopperPrimitive.PopperPrimitiveArrow>;
 interface SelectArrowProps extends PopperArrowProps {}
 
 const SelectArrow = React.forwardRef<SelectArrowElement, SelectArrowProps>(
@@ -1632,7 +1601,7 @@ const SelectArrow = React.forwardRef<SelectArrowElement, SelectArrowProps>(
     const context = useSelectContext(ARROW_NAME, __scopeSelect);
     const contentContext = useSelectContentContext(ARROW_NAME, __scopeSelect);
     return context.open && contentContext.position === 'popper' ? (
-      <PopperPrimitive.Arrow
+      <PopperPrimitive.PopperPrimitiveArrow
         {...popperScope}
         {...arrowProps}
         ref={forwardedRef}
@@ -1766,7 +1735,22 @@ function wrapArray<T>(array: T[], startIndex: number) {
   return array.map<T>((_, index) => array[(startIndex + index) % array.length]!);
 }
 
-const SelectRoot = Select;
+const Root = Select;
+const Trigger = SelectTrigger;
+const Value = SelectValue;
+const Icon = SelectIcon;
+const Portal = SelectPortal;
+const Content = SelectContent;
+const Viewport = SelectViewport;
+const Group = SelectGroup;
+const Label = SelectLabel;
+const Item = SelectItem;
+const ItemText = SelectItemText;
+const ItemIndicator = SelectItemIndicator;
+const ScrollUpButton = SelectScrollUpButton;
+const ScrollDownButton = SelectScrollDownButton;
+const Separator = SelectSeparator;
+const Arrow = SelectArrow;
 
 export {
   createSelectScope,
@@ -1788,7 +1772,22 @@ export {
   SelectSeparator,
   SelectArrow,
   //
-  SelectRoot
+  Root as SelectRoot,
+  Trigger as SelectPrimitiveTrigger,
+  Value as SelectPrimitiveValue,
+  Icon as SelectPrimitiveIcon,
+  Portal as SelectPrimitivePortal,
+  Content as SelectPrimitiveContent,
+  Viewport as SelectPrimitiveViewport,
+  Group as SelectPrimitiveGroup,
+  Label as SelectPrimitiveLabel,
+  Item as SelectPrimitiveItem,
+  ItemText as SelectPrimitiveItemText,
+  ItemIndicator as SelectPrimitiveItemIndicator,
+  ScrollUpButton as SelectPrimitiveScrollUpButton,
+  ScrollDownButton as SelectPrimitiveScrollDownButton,
+  Separator as SelectPrimitiveSeparator,
+  Arrow as SelectPrimitiveArrow
 };
 export type {
   SelectProps,

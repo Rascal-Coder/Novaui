@@ -190,7 +190,7 @@ const ControlledMultipleAccordion = memo(function ControlledMultipleAccordion({
   );
 });
 
-export default function AccordionDemo() {
+export default function AccordionExample() {
   // 移除全局状态，避免全局重渲染
   // const [singleValue, setSingleValue] = useState<string>('');
   // const [multipleValue, setMultipleValue] = useState<string[]>([]);

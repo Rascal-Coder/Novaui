@@ -13,6 +13,8 @@ export * from './components/avatar';
 export * from './components/alert-dialog';
 export * from './components/dialog';
 export * from './components/select';
+export * from './components/popper';
+export * from './components/arrow';
 
 export * from './context';
 export * from './shared';

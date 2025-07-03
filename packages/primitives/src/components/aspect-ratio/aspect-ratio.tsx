@@ -18,7 +18,7 @@ const AspectRatio = React.forwardRef<AspectRatioElement, AspectRatioProps>((prop
   const { ratio = 1 / 1, style, ...aspectRatioProps } = props;
   return (
     <div
-      data-radix-aspect-ratio-wrapper=""
+      data-novaui-aspect-ratio-wrapper=""
       style={{
         // ensures inner element is contained
         position: 'relative',

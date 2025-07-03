@@ -91,7 +91,7 @@ interface SlotCloneProps {
  * Slottable
  * ----------------------------------------------------------------------------------------------- */
 
-const SLOTTABLE_IDENTIFIER = Symbol('radix.slottable');
+const SLOTTABLE_IDENTIFIER = Symbol('novaui.slottable');
 
 interface SlottableProps {
   children: React.ReactNode;

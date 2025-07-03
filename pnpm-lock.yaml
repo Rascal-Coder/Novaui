@@ -334,6 +334,9 @@ importers:
 
   packages/primitives:
     dependencies:
+      '@floating-ui/react-dom':
+        specifier: ^2.1.4
+        version: 2.1.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       aria-hidden:
         specifier: ^1.2.4
         version: 1.2.6

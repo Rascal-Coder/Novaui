@@ -17,7 +17,7 @@ const variants: ButtonVariant[] = ['solid', 'pure', 'plain', 'outline', 'dashed'
 const sizes: ThemeSize[] = ['xs', 'sm', 'md', 'lg', 'xl', '2xl'];
 const shadows: ButtonShadow[] = ['none', 'sm', 'md', 'lg'];
 
-export default function Button() {
+export default function ButtonExample() {
   return (
     <div className="flex-c gap-4">
       {/* Color */}

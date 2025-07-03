@@ -2,7 +2,7 @@ import { Rocket, X } from 'lucide-react';
 import { NButtonIcon, NCard, type ThemeSize } from 'nova-ui';
 
 const sizes: ThemeSize[] = ['xs', 'sm', 'md', 'lg', 'xl', '2xl'];
-export default function Card() {
+export default function CardExample() {
   return (
     <div className="flex-c gap-4">
       {/* Size Example */}

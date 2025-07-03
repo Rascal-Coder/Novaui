@@ -71,7 +71,7 @@ function createCollection<ItemElement extends HTMLElement, ItemData = {}>(name: 
    * --------------------------------------------------------------------------------------------- */
 
   const ITEM_SLOT_NAME = `${name}CollectionItemSlot`;
-  const ITEM_DATA_ATTR = 'data-radix-collection-item';
+  const ITEM_DATA_ATTR = 'data-novaui-collection-item';
 
   type CollectionItemSlotProps = ItemData & {
     children: React.ReactNode;

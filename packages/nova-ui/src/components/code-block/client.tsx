@@ -71,8 +71,8 @@ import {
   SiVuedotjs,
   SiWebassembly
 } from '@icons-pack/react-simple-icons';
+import { useControllableState } from '@novaui/primitives';
 import { cn } from '@novaui/variants';
-import { useControllableState } from '@radix-ui/react-use-controllable-state';
 import {
   transformerNotationDiff,
   transformerNotationErrorLevel,

@@ -404,25 +404,25 @@ const Toast = React.forwardRef<ToastElement, ToastProps>((props: ScopedProps<Toa
         onResume={useCallbackRef(props.onResume)}
         onSwipeCancel={composeEventHandlers(props.onSwipeCancel, event => {
           event.currentTarget.setAttribute('data-swipe', 'cancel');
-          event.currentTarget.style.removeProperty('--radix-toast-swipe-move-x');
-          event.currentTarget.style.removeProperty('--radix-toast-swipe-move-y');
-          event.currentTarget.style.removeProperty('--radix-toast-swipe-end-x');
-          event.currentTarget.style.removeProperty('--radix-toast-swipe-end-y');
+          event.currentTarget.style.removeProperty('--novaui-toast-swipe-move-x');
+          event.currentTarget.style.removeProperty('--novaui-toast-swipe-move-y');
+          event.currentTarget.style.removeProperty('--novaui-toast-swipe-end-x');
+          event.currentTarget.style.removeProperty('--novaui-toast-swipe-end-y');
         })}
         onSwipeEnd={composeEventHandlers(props.onSwipeEnd, event => {
           const { x, y } = event.detail.delta;
           event.currentTarget.setAttribute('data-swipe', 'end');
-          event.currentTarget.style.removeProperty('--radix-toast-swipe-move-x');
-          event.currentTarget.style.removeProperty('--radix-toast-swipe-move-y');
-          event.currentTarget.style.setProperty('--radix-toast-swipe-end-x', `${x}px`);
-          event.currentTarget.style.setProperty('--radix-toast-swipe-end-y', `${y}px`);
+          event.currentTarget.style.removeProperty('--novaui-toast-swipe-move-x');
+          event.currentTarget.style.removeProperty('--novaui-toast-swipe-move-y');
+          event.currentTarget.style.setProperty('--novaui-toast-swipe-end-x', `${x}px`);
+          event.currentTarget.style.setProperty('--novaui-toast-swipe-end-y', `${y}px`);
           setOpen(false);
         })}
         onSwipeMove={composeEventHandlers(props.onSwipeMove, event => {
           const { x, y } = event.detail.delta;
           event.currentTarget.setAttribute('data-swipe', 'move');
-          event.currentTarget.style.setProperty('--radix-toast-swipe-move-x', `${x}px`);
-          event.currentTarget.style.setProperty('--radix-toast-swipe-move-y', `${y}px`);
+          event.currentTarget.style.setProperty('--novaui-toast-swipe-move-x', `${x}px`);
+          event.currentTarget.style.setProperty('--novaui-toast-swipe-move-y', `${y}px`);
         })}
         onSwipeStart={composeEventHandlers(props.onSwipeStart, event => {
           event.currentTarget.setAttribute('data-swipe', 'start');
@@ -837,8 +837,8 @@ const ToastAnnounceExclude = React.forwardRef<ToastAnnounceExcludeElement, Toast
 
     return (
       <Primitive.div
-        data-radix-toast-announce-alt={altText || undefined}
-        data-radix-toast-announce-exclude=""
+        data-novaui-toast-announce-alt={altText || undefined}
+        data-novaui-toast-announce-exclude=""
         {...announceExcludeProps}
         ref={forwardedRef}
       />

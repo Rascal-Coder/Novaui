@@ -11,3 +11,5 @@ export * from './id';
 export * from './use-is-hydrated';
 export * from './focus-guards';
 export * from './focus-scope';
+export * from './use-previous';
+export * from './use-size';
