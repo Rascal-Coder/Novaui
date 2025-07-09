@@ -1,5 +1,6 @@
 import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared';
 
+import DocsNav from '@/components/docs-nav';
 import { i18n } from '@/lib/i18n';
 
 export function baseOptions(locale: string): BaseLayoutProps {
@@ -7,7 +8,8 @@ export function baseOptions(locale: string): BaseLayoutProps {
     i18n,
     nav: {
       title: locale === 'cn' ? 'Chinese Docs' : 'English Docs',
-      url: `/${locale}`
+      url: `/${locale}`,
+      component: <DocsNav />
     },
     githubUrl: 'https://github.com/Rascal-Coder/Novaui',
     links: [
