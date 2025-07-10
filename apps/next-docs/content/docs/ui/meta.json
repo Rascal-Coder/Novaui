@@ -1,0 +1,7 @@
+{
+  "title": "Docs",
+  "description": "Docs",
+  "icon": "Building",
+  "root": true,
+  "pages": ["---Guide---", "index", "usage", "---components---", "button", "select"]
+}
