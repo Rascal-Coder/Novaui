@@ -10,15 +10,8 @@ export default async function Layout({ params, children }: { params: Promise<{ l
   return (
     <DocsLayout
       {...baseOptions(lang)}
+      links={[]}
       tree={source.pageTree[lang]}
-      // links={[
-      //   {
-      //     type: 'custom',
-      //     // on: 'menu',
-      //     on: 'nav',
-      //     children: <div>Hello</div>
-      //   }
-      // ]}
     >
       {children}
     </DocsLayout>
