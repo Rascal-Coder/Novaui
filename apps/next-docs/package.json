@@ -18,6 +18,7 @@
     "react-dom": "19.0.0"
   },
   "devDependencies": {
+    "@novaui/variants": "workspace:*",
     "@tailwindcss/postcss": "^4.1.11",
     "@types/mdx": "^2.0.13",
     "@types/node": "22.13.5",

@@ -81,6 +81,9 @@ importers:
         specifier: 19.0.0
         version: 19.0.0(react@19.0.0)
     devDependencies:
+      '@novaui/variants':
+        specifier: workspace:*
+        version: link:../../packages/ui-variants
       '@tailwindcss/postcss':
         specifier: ^4.1.11
         version: 4.1.11
