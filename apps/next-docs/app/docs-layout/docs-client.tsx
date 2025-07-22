@@ -18,8 +18,8 @@ export function Navbar(props: ComponentProps<'header'>) {
       id="nd-subnav"
       {...props}
       className={cn(
-        'fixed top-(--fd-banner-height) inset-x-0 z-30 flex items-center px-4 border-b transition-colors backdrop-blur-sm',
-        !isTransparent && 'bg-fd-background/80',
+        'fixed top-[--fd-banner-height] inset-x-0 z-30 flex items-center px-4 border-b transition-colors backdrop-blur-sm',
+        !isTransparent && 'bg-background/80',
         props.className
       )}
     >
@@ -75,7 +75,7 @@ export function CollapsibleControl() {
 
   return (
     <div
-      className="bg-fd-muted text-fd-muted-foreground animate-fd-fade-in fixed z-10 flex border rounded-xl p-0.5 shadow-lg max-xl:end-4 xl:start-4"
+      className="animate-fd-fade-in fixed z-10 flex border rounded-xl bg-muted p-0.5 text-muted-foreground shadow-lg max-xl:end-4 xl:start-4"
       style={{
         top: 'calc(var(--fd-banner-height) + var(--fd-tocnav-height) + var(--spacing) * 4)'
       }}

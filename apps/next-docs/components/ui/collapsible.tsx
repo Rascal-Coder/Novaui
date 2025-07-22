@@ -1,15 +1,17 @@
 'use client';
+import {
+  CollapsibleContent as CollapsibleContentPrimitive,
+  CollapsibleRoot,
+  CollapsibleTrigger
+} from '@novaui/primitives';
 import { cn } from '@novaui/variants';
-import * as CollapsiblePrimitive from '@radix-ui/react-collapsible';
 import { forwardRef, useEffect, useState } from 'react';
 
-const Collapsible = CollapsiblePrimitive.Root;
-
-const CollapsibleTrigger = CollapsiblePrimitive.CollapsibleTrigger;
+const Collapsible = CollapsibleRoot;
 
 const CollapsibleContent = forwardRef<
   HTMLDivElement,
-  React.ComponentPropsWithoutRef<typeof CollapsiblePrimitive.CollapsibleContent>
+  React.ComponentPropsWithoutRef<typeof CollapsibleContentPrimitive>
 >(({ children, ...props }, ref) => {
   const [mounted, setMounted] = useState(false);
 
@@ -18,7 +20,7 @@ const CollapsibleContent = forwardRef<
   }, []);
 
   return (
-    <CollapsiblePrimitive.CollapsibleContent
+    <CollapsibleContentPrimitive
       ref={ref}
       {...props}
       className={cn(
@@ -28,10 +30,10 @@ const CollapsibleContent = forwardRef<
       )}
     >
       {children}
-    </CollapsiblePrimitive.CollapsibleContent>
+    </CollapsibleContentPrimitive>
   );
 });
 
-CollapsibleContent.displayName = CollapsiblePrimitive.CollapsibleContent.displayName;
+CollapsibleContent.displayName = CollapsibleContentPrimitive.displayName;
 
 export { Collapsible, CollapsibleTrigger, CollapsibleContent };

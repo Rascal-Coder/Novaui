@@ -90,7 +90,7 @@ export function DocsLayout({
                     buttonVariants({
                       color: 'ghost',
                       size: 'icon-sm',
-                      className: 'mb-auto text-fd-muted-foreground max-md:hidden'
+                      className: 'mb-auto text-muted-foreground max-md:hidden'
                     })
                   )}
                 >
@@ -106,7 +106,6 @@ export function DocsLayout({
                 />
               ))}
             {tabs.length > 0 && <RootToggle options={tabs} />}
-
             {sidebarBanner}
           </SidebarHeader>
         </HideIfEmpty>
@@ -134,7 +133,7 @@ export function DocsLayout({
                     key={i}
                     className={cn(
                       buttonVariants({ size: 'icon', color: 'ghost' }),
-                      'text-fd-muted-foreground md:[&_svg]:size-4.5',
+                      'text-muted-foreground md:[&_svg]:size-4.5',
                       i === arr.length - 1 && 'me-auto'
                     )}
                   >

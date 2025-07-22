@@ -50,18 +50,16 @@ export function TOCItems({ ref, className, ...props }: ComponentProps<'div'>) {
   const { text } = useI18n();
 
   if (items.length === 0)
-    return (
-      <div className="bg-fd-card text-fd-muted-foreground border rounded-lg p-3 text-xs">{text.tocNoHeadings}</div>
-    );
+    return <div className="border rounded-lg bg-card p-3 text-xs text-muted-foreground">{text.tocNoHeadings}</div>;
 
   return (
     <>
       <TocThumb
-        className="h---fd-height bg-fd-primary top---fd-top absolute w-px transition-all"
+        className="absolute top-[--fd-top] h-[--fd-height] w-px bg-primary transition-all"
         containerRef={containerRef}
       />
       <div
-        className={cn('flex flex-col border-s border-fd-foreground/10', className)}
+        className={cn('flex flex-col border-s border-foreground/10', className)}
         ref={mergeRefs(ref, containerRef)}
         {...props}
       >
@@ -81,7 +79,7 @@ function TOCItem({ item }: { item: TOCItemType }) {
     <Primitive.TOCItem
       href={item.url}
       className={cn(
-        'prose py-1.5 text-sm text-fd-muted-foreground transition-colors [overflow-wrap:anywhere] first:pt-0 last:pb-0 data-[active=true]:text-fd-primary',
+        'prose py-1.5 text-sm text-muted-foreground transition-colors [overflow-wrap:anywhere] first:pt-0 last:pb-0 data-[active=true]:text-primary',
         item.depth <= 2 && 'ps-3',
         item.depth === 3 && 'ps-6',
         item.depth >= 4 && 'ps-8'

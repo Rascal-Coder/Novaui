@@ -1,5 +1,4 @@
 'use client';
-
 import { cn } from '@novaui/variants';
 import { type BreadcrumbOptions, getBreadcrumbItemsFromPath } from 'fumadocs-core/breadcrumb';
 import { createContext, usePathname } from 'fumadocs-core/framework';
@@ -36,12 +35,12 @@ export function PageTOCPopoverTrigger(props: ComponentProps<'button'>) {
     <CollapsibleTrigger
       {...props}
       className={cn(
-        'flex w-full h-(--fd-tocnav-height) items-center text-sm text-fd-muted-foreground gap-2.5 px-4 py-2.5 text-start focus-visible:outline-none [&_svg]:shrink-0 [&_svg]:size-4 md:px-6',
+        'flex w-full h-[--fd-tocnav-height] items-center text-sm text-muted-foreground gap-2.5 px-4 py-2.5 text-start focus-visible:outline-none [&_svg]:shrink-0 [&_svg]:size-4 md:px-6',
         props.className
       )}
     >
       <ProgressCircle
-        className={cn(open && 'text-fd-primary')}
+        className={cn(open && 'text-primary')}
         max={1}
         value={(selected + 1) / Math.max(1, items.length)}
       />
@@ -49,7 +48,7 @@ export function PageTOCPopoverTrigger(props: ComponentProps<'button'>) {
         <span
           className={cn(
             'truncate transition-all',
-            open && 'text-fd-foreground',
+            open && 'text-foreground',
             showItem && 'opacity-0 -translate-y-full pointer-events-none'
           )}
         >
@@ -177,7 +176,7 @@ export function PageTOCPopover(props: ComponentProps<'div'>) {
           {...props}
           className={cn(
             'fixed inset-x-0 z-10 border-b backdrop-blur-sm transition-colors xl:hidden',
-            (!isTransparent || open) && 'bg-fd-background/80',
+            (!isTransparent || open) && 'bg-background/80',
             open && 'shadow-lg',
             props.className
           )}
@@ -236,7 +235,7 @@ export function PageLastUpdate({
   return (
     <p
       {...props}
-      className={cn('text-sm text-fd-muted-foreground', props.className)}
+      className={cn('text-sm text-muted-foreground', props.className)}
     >
       {text.lastUpdate} {date}
     </p>
@@ -324,7 +323,7 @@ function FooterItem({ item, index }: { item: Item; index: 0 | 1 }) {
     <Link
       href={item.url}
       className={cn(
-        'flex flex-col gap-2 rounded-lg border p-4 text-sm transition-colors hover:bg-fd-accent/80 hover:text-fd-accent-foreground @max-lg:col-span-full',
+        'flex flex-col gap-2 rounded-lg border p-4 text-sm transition-colors hover:bg-accent/80 hover:text-accent-foreground max-lg:col-span-full',
         index === 1 && 'text-end'
       )}
     >
@@ -332,7 +331,7 @@ function FooterItem({ item, index }: { item: Item; index: 0 | 1 }) {
         <Icon className="size-4 shrink-0 -mx-1 rtl:rotate-180" />
         <p>{item.name}</p>
       </div>
-      <p className="text-fd-muted-foreground truncate">
+      <p className="truncate text-muted-foreground">
         {item.description ?? (index === 0 ? text.previousPage : text.nextPage)}
       </p>
     </Link>
@@ -362,14 +361,14 @@ export function PageBreadcrumb({
   return (
     <div
       {...props}
-      className={cn('flex items-center gap-1.5 text-sm text-fd-muted-foreground', props.className)}
+      className={cn('flex items-center gap-1.5 text-sm text-muted-foreground', props.className)}
     >
       {items.map((item, i) => {
-        const className = cn('truncate', i === items.length - 1 && 'text-fd-primary font-medium');
+        const className = cn('truncate', i === items.length - 1 && 'text-primary font-medium');
 
         return (
           <Fragment key={i}>
-            {i !== 0 && <span className="text-fd-foreground/30">/</span>}
+            {i !== 0 && <span className="text-foreground/30">/</span>}
             {item.url ? (
               <Link
                 className={cn(className, 'transition-opacity hover:opacity-80')}
@@ -399,7 +398,7 @@ export function PageTOC(props: ComponentProps<'div'>) {
         height: 'calc(100dvh - var(--fd-banner-height) - var(--fd-nav-height))'
       }}
     >
-      <div className="w---fd-toc-width h-full max-w-full flex flex-col pe-4">{props.children}</div>
+      <div className="h-full max-w-full w-[--fd-toc-width] flex flex-col pe-4">{props.children}</div>
     </div>
   );
 }

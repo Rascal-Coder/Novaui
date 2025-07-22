@@ -1,6 +1,5 @@
-import { generateOGImage } from 'fumadocs-ui/og';
-
 import { metadataImage } from '@/lib/metadata';
+import { generateOGImage } from '@/og';
 
 export const GET = metadataImage.createAPI(page => {
   return generateOGImage({

@@ -72,12 +72,12 @@ export function RootToggle({
         <PopoverTrigger
           {...props}
           className={cn(
-            'flex items-center gap-2 rounded-lg p-2 border bg-fd-secondary/50 text-start text-fd-secondary-foreground transition-colors hover:bg-fd-accent data-[state=open]:bg-fd-accent data-[state=open]:text-fd-accent-foreground',
+            'flex items-center gap-2 rounded-lg p-2 border bg-secondary/50 text-start text-secondary-foreground transition-colors hover:bg-accent data-[state=open]:bg-accent data-[state=open]:text-accent-foreground',
             props.className
           )}
         >
           {item}
-          <ChevronsUpDown className="text-fd-muted-foreground ms-auto size-4" />
+          <ChevronsUpDown className="ms-auto size-4 text-muted-foreground" />
         </PopoverTrigger>
       )}
       <PopoverContent className="min-w---radix-popover-trigger-width flex flex-col gap-1 overflow-hidden p-1">
@@ -89,17 +89,17 @@ export function RootToggle({
               onClick={onClick}
               {...option.props}
               className={cn(
-                'flex items-center gap-2 rounded-lg p-1.5 hover:bg-fd-accent hover:text-fd-accent-foreground',
+                'flex items-center gap-2 rounded-lg p-1.5 hover:bg-accent hover:text-accent-foreground',
                 option.props?.className
               )}
             >
               <div className="size-9 md:mb-auto md:mt-1 md:size-5">{option.icon}</div>
               <div>
                 <p className="text-sm font-medium">{option.title}</p>
-                <p className="text-fd-muted-foreground text-[13px] empty:hidden">{option.description}</p>
+                <p className="text-[13px] text-muted-foreground empty:hidden">{option.description}</p>
               </div>
 
-              <Check className={cn('ms-auto size-3.5 text-fd-primary', !(option === selected) && 'invisible')} />
+              <Check className={cn('ms-auto size-3.5 text-primary', !(option === selected) && 'invisible')} />
             </Link>
           );
         })}

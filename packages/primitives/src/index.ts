@@ -15,6 +15,11 @@ export * from './components/dialog';
 export * from './components/select';
 export * from './components/popper';
 export * from './components/arrow';
+export * from './components/navigation-menu';
+export * from './components/popover';
+export * from './components/scroll-area';
+export * from './components/tabs';
+export * from './components/roving-focus';
 
 export * from './context';
 export * from './shared';

@@ -36,7 +36,7 @@ export function PageTOCTitle(props: ComponentProps<'h2'>) {
   return (
     <h3
       {...props}
-      className={cn('inline-flex items-center gap-1.5 text-sm text-fd-muted-foreground', props.className)}
+      className={cn('inline-flex items-center gap-1.5 text-sm text-muted-foreground', props.className)}
     >
       <Text className="size-4" />
       <I18nLabel label="toc" />

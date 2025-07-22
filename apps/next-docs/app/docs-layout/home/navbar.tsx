@@ -1,6 +1,6 @@
 'use client';
+import type { NavigationMenuContentProps, NavigationMenuTriggerProps } from '@novaui/primitives';
 import { cn } from '@novaui/variants';
-import type { NavigationMenuContentProps, NavigationMenuTriggerProps } from '@radix-ui/react-navigation-menu';
 import { type VariantProps, cva } from 'class-variance-authority';
 import Link, { type LinkProps } from 'fumadocs-core/link';
 import { type ComponentProps, useState } from 'react';
@@ -19,7 +19,7 @@ import {
 import { useNav } from '@/contexts/layout';
 
 const navItemVariants = cva(
-  'inline-flex items-center gap-1 p-2 text-fd-muted-foreground transition-colors hover:text-fd-accent-foreground data-[active=true]:text-fd-primary [&_svg]:size-4'
+  'inline-flex items-center gap-1 p-2 text-muted-foreground transition-colors hover:text-accent-foreground data-[active=true]:text-primary [&_svg]:size-4'
 );
 
 export function Navbar(props: ComponentProps<'div'>) {
@@ -36,9 +36,9 @@ export function Navbar(props: ComponentProps<'div'>) {
         id="nd-nav"
         {...props}
         className={cn(
-          'fixed top-(--fd-banner-height) z-40 left-0 backdrop-blur-lg border-b transition-colors *:mx-auto *:max-w-fd-container',
+          'fixed top-[--fd-banner-height] z-40 left-0 backdrop-blur-lg border-b transition-colors *:mx-auto *:max-w[--fd-container]',
           value.length > 0 && 'max-lg:shadow-lg max-lg:rounded-b-2xl',
-          (!isTransparent || value.length > 0) && 'bg-fd-background/80',
+          (!isTransparent || value.length > 0) && 'bg-background/80',
           props.className
         )}
         style={{
@@ -88,7 +88,7 @@ export function NavbarMenuLink(props: LinkProps) {
       <Link
         {...props}
         className={cn(
-          'flex flex-col gap-2 rounded-lg border bg-fd-card p-3 transition-colors hover:bg-fd-accent/80 hover:text-fd-accent-foreground',
+          'flex flex-col gap-2 rounded-lg border bg-card p-3 transition-colors hover:bg-accent/80 hover:text-accent-foreground',
           props.className
         )}
       >

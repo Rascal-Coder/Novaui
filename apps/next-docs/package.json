@@ -5,27 +5,28 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev --turbo",
-    "start": "next start",
-    "postinstall": "fumadocs-mdx"
+    "start": "next start"
   },
   "dependencies": {
+    "@novaui/primitives": "workspace:*",
     "@orama/tokenizers": "^3.1.9",
+    "class-variance-authority": "^0.7.1",
     "fumadocs-core": "^15.6.2",
     "fumadocs-mdx": "^11.6.10",
-    "fumadocs-ui": "^15.6.2",
     "next": "15.3.4",
+    "next-themes": "^0.4.6",
     "react": "19.0.0",
     "react-dom": "19.0.0"
   },
   "devDependencies": {
     "@novaui/variants": "workspace:*",
-    "@tailwindcss/postcss": "^4.1.11",
     "@types/mdx": "^2.0.13",
     "@types/node": "22.13.5",
     "@types/react": "19.0.10",
     "@types/react-dom": "19.0.4",
-    "postcss": "^8.5.6",
-    "tailwindcss": "^4.1.11",
-    "typescript": "5.7.3"
+    "@unocss/postcss": "^66.3.3",
+    "@unocss/reset": "66.0.0",
+    "typescript": "5.7.3",
+    "unocss": "66.0.0"
   }
 }

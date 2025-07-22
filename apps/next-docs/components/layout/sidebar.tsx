@@ -1,8 +1,7 @@
 'use client';
+import type { CollapsibleContentProps, CollapsibleTriggerProps, ScrollAreaProps } from '@novaui/primitives';
+import { Presence } from '@novaui/primitives';
 import { cn } from '@novaui/variants';
-import type { CollapsibleContentProps, CollapsibleTriggerProps } from '@radix-ui/react-collapsible';
-import { Presence } from '@radix-ui/react-presence';
-import { type ScrollAreaProps } from '@radix-ui/react-scroll-area';
 import { cva } from 'class-variance-authority';
 import { usePathname } from 'fumadocs-core/framework';
 import Link, { type LinkProps } from 'fumadocs-core/link';
@@ -58,12 +57,12 @@ interface InternalContext {
 }
 
 const itemVariants = cva(
-  'relative flex flex-row items-center gap-2 rounded-xl p-2 text-start text-fd-muted-foreground [overflow-wrap:anywhere] [&_svg]:size-4 [&_svg]:shrink-0',
+  'relative flex flex-row items-center gap-2 rounded-xl p-2 text-start text-muted-foreground [overflow-wrap:anywhere] [&_svg]:size-4 [&_svg]:shrink-0',
   {
     variants: {
       active: {
-        true: 'bg-fd-primary/10 text-fd-primary',
-        false: 'transition-colors hover:bg-fd-accent/50 hover:text-fd-accent-foreground/80 hover:transition-none'
+        true: 'bg-primary/10 text-primary',
+        false: 'transition-colors hover:bg-accent/50 hover:text-accent-foreground/80 hover:transition-none'
       }
     }
   }
@@ -103,7 +102,7 @@ export function Sidebar({ defaultOpenLevel = 0, prefetch = true, collapsible = t
       <Context.Provider value={context}>
         <Presence present={open}>
           <div
-            className="backdrop-blur-xs data-[state=open]:animate-fd-fade-in data-[state=closed]:animate-fd-fade-out fixed inset-0 z-40"
+            className="fixed inset-0 z-40 backdrop-blur-sm data-[state=closed]:animate-fade-out data-[state=open]:animate-fade-in"
             data-state={state}
             onClick={() => setOpen(false)}
           />
@@ -111,11 +110,11 @@ export function Sidebar({ defaultOpenLevel = 0, prefetch = true, collapsible = t
         <Presence present={open}>
           {({ present }) => (
             <aside
-              id="nd-sidebar-mobile"
+              id="novaui-docs-sidebar-mobile"
               {...props}
               data-state={state}
               className={cn(
-                'fixed text-[15px] flex flex-col shadow-lg rounded-2xl border start-2 inset-y-2 w-[85%] max-w-[380px] z-40 bg-fd-background data-[state=open]:animate-fd-sidebar-in data-[state=closed]:animate-fd-sidebar-out',
+                'fixed text-[15px] flex flex-col shadow-lg rounded-2xl border start-2 inset-y-2 w-[85%] max-w-[380px] z-40 bg-background data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-out',
                 !present && 'invisible',
                 props.className
               )}
@@ -130,16 +129,16 @@ export function Sidebar({ defaultOpenLevel = 0, prefetch = true, collapsible = t
 
   return (
     <aside
-      id="nd-sidebar"
+      id="novaui-docs-sidebar"
       {...props}
       data-collapsed={collapsed}
       className={cn(
-        'fixed start-0 flex flex-col items-end top-(--fd-sidebar-top) bottom-(--fd-sidebar-margin) z-20 bg-fd-card text-sm border-e max-md:hidden *:w-(--fd-sidebar-width)',
+        'fixed start-0 flex flex-col items-end top-[--fd-sidebar-top] bottom-[--fd-sidebar-margin] z-20 bg-card text-sm border-e max-md:hidden *:w-[--fd-sidebar-width]',
         collapsed && [
           'rounded-xl border',
           hover
             ? 'z-50 translate-x-2 shadow-lg'
-            : 'opacity-0 -translate-x-(--fd-sidebar-offset) rtl:translate-x-(--fd-sidebar-offset)'
+            : 'opacity-0 -translate-x-[--fd-sidebar-offset] rtl:translate-x-[--fd-sidebar-offset]'
         ],
         props.className
       )}
@@ -371,7 +370,7 @@ export function SidebarFolderContent(props: CollapsibleContentProps) {
           [ctx]
         )}
       >
-        {ctx.level === 1 && <div className="bg-fd-border absolute start-2.5 inset-y-1 w-px" />}
+        {ctx.level === 1 && <div className="absolute start-2.5 inset-y-1 w-px bg-border" />}
         {props.children}
       </Context.Provider>
     </CollapsibleContent>
@@ -524,5 +523,5 @@ function getOffset(level: number) {
 function Border({ level, active }: { level: number; active?: boolean }) {
   if (level <= 1) return null;
 
-  return <div className={cn('absolute w-px inset-y-3 z-2 start-2.5 md:inset-y-2', active && 'bg-fd-primary')} />;
+  return <div className={cn('absolute w-px inset-y-3 z-2 start-2.5 md:inset-y-2', active && 'bg-primary')} />;
 }

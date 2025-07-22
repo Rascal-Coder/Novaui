@@ -45,7 +45,7 @@ export function HomeLayout(props: HomeLayoutProps & HTMLAttributes<HTMLElement>)
   return (
     <NavProvider transparentMode={nav?.transparentMode}>
       <main
-        id="nd-home-layout"
+        id="novaui-docs-home-layout"
         {...rest}
         className={cn('flex flex-1 flex-col pt-14', rest.className)}
       >
@@ -177,7 +177,7 @@ export function Header({
                 <LanguageToggle>
                   <Languages className="size-5" />
                   <LanguageToggleText />
-                  <ChevronDown className="text-fd-muted-foreground size-3" />
+                  <ChevronDown className="size-3 text-muted-foreground" />
                 </LanguageToggle>
               ) : null}
               {themeSwitch.enabled !== false && (themeSwitch.component ?? <ThemeToggle mode={themeSwitch?.mode} />)}
@@ -198,7 +198,7 @@ function NavbarLinkItem({ item, ...props }: { item: LinkItemType; className?: st
 
       const {
         banner = child.icon ? (
-          <div className="bg-fd-muted w-fit border rounded-md p-1 [&_svg]:size-4">{child.icon}</div>
+          <div className="w-fit border rounded-md bg-muted p-1 [&_svg]:size-4">{child.icon}</div>
         ) : null,
         ...rest
       } = child.menu ?? {};
@@ -214,7 +214,7 @@ function NavbarLinkItem({ item, ...props }: { item: LinkItemType; className?: st
             <>
               {banner}
               <p className="text-[15px] font-medium">{child.text}</p>
-              <p className="text-fd-muted-foreground text-sm empty:hidden">{child.description}</p>
+              <p className="text-sm text-muted-foreground empty:hidden">{child.description}</p>
             </>
           )}
         </NavbarMenuLink>
