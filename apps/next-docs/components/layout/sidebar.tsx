@@ -114,7 +114,7 @@ export function Sidebar({ defaultOpenLevel = 0, prefetch = true, collapsible = t
               {...props}
               data-state={state}
               className={cn(
-                'fixed text-[15px] flex flex-col shadow-lg rounded-2xl border start-2 inset-y-2 w-[85%] max-w-[380px] z-40 bg-background data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-out',
+                'fixed text-[15px] flex flex-col shadow-lg rounded-2xl border start-2 inset-y-2 w-[85%] max-w-[380px] z-40 bg-background',
                 !present && 'invisible',
                 props.className
               )}

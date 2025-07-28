@@ -75,7 +75,7 @@ export function CollapsibleControl() {
 
   return (
     <div
-      className="animate-fd-fade-in fixed z-10 flex border rounded-xl bg-muted p-0.5 text-muted-foreground shadow-lg max-xl:end-4 xl:start-4"
+      className="fixed z-10 flex animate-fade-in border rounded-xl bg-muted p-0.5 text-muted-foreground shadow-lg max-xl:end-4 xl:start-4"
       style={{
         top: 'calc(var(--fd-banner-height) + var(--fd-tocnav-height) + var(--spacing) * 4)'
       }}
