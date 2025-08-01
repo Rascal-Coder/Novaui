@@ -5,6 +5,7 @@ export * from './variants/toast';
 export * from './variants/alert';
 export * from './variants/accordion';
 export * from './variants/avatar';
+export * from './variants/dialog';
 
 export * from './shared';
 export * from './types';

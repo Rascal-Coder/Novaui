@@ -13,3 +13,4 @@ export * from './focus-guards';
 export * from './focus-scope';
 export * from './use-previous';
 export * from './use-size';
+export * from './useScrollLock';

@@ -77,35 +77,24 @@ const DialogContentImpl = React.forwardRef<DialogContentImplElement, DialogConte
     useFocusGuards();
 
     return (
-      <>
-        <FocusScope
-          asChild
-          loop
-          trapped={trapFocus}
-          onMountAutoFocus={onOpenAutoFocus}
-          onUnmountAutoFocus={onCloseAutoFocus}
-        >
-          <DismissableLayer
-            aria-describedby={context.descriptionId}
-            aria-labelledby={context.titleId}
-            data-state={getState(context.open)}
-            id={context.contentId}
-            role="dialog"
-            {...contentProps}
-            ref={composedRefs}
-            onDismiss={() => context.onOpenChange(false)}
-          />
-        </FocusScope>
-        {/* {process.env.NODE_ENV !== 'production' && (
-          <>
-            <TitleWarning titleId={context.titleId} />
-            <DescriptionWarning
-              contentRef={contentRef}
-              descriptionId={context.descriptionId}
-            />
-          </>
-        )} */}
-      </>
+      <FocusScope
+        asChild
+        loop
+        trapped={trapFocus}
+        onMountAutoFocus={onOpenAutoFocus}
+        onUnmountAutoFocus={onCloseAutoFocus}
+      >
+        <DismissableLayer
+          aria-describedby={context.descriptionId}
+          aria-labelledby={context.titleId}
+          data-state={getState(context.open)}
+          id={context.contentId}
+          role="dialog"
+          {...contentProps}
+          ref={composedRefs}
+          onDismiss={() => context.onOpenChange(false)}
+        />
+      </FocusScope>
     );
   }
 );
@@ -211,7 +200,7 @@ DialogTrigger.displayName = TRIGGER_NAME;
 
 const PORTAL_NAME = 'DialogPortal';
 
-type PortalContextValue = { forceMount?: true };
+type PortalContextValue = { forceMount?: boolean };
 const [PortalProvider, usePortalContext] = createDialogContext<PortalContextValue>(PORTAL_NAME, {
   forceMount: undefined
 });
@@ -225,7 +214,7 @@ interface DialogPortalProps {
    * Used to force mounting when more control is needed. Useful when controlling animation with React animation
    * libraries.
    */
-  forceMount?: true;
+  forceMount?: boolean;
 }
 
 const DialogPortal: React.FC<DialogPortalProps> = (props: ScopedProps<DialogPortalProps>) => {
@@ -262,7 +251,7 @@ interface DialogOverlayProps extends DialogOverlayImplProps {
    * Used to force mounting when more control is needed. Useful when controlling animation with React animation
    * libraries.
    */
-  forceMount?: true;
+  forceMount?: boolean;
 }
 
 const DialogOverlay = React.forwardRef<DialogOverlayElement, DialogOverlayProps>(
